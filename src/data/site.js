@@ -18,10 +18,10 @@ export const SITE = {
   updated: "July 2026",
   updatedISO: "2026-07-20",
 
-  // The owner's real, reachable address (set 23 July 2026 at the owner's request —
-  // AdSense requires a genuinely working contact). Swap for a domain address
-  // (e.g. contact@kakoucalc.com) here in one line once one exists.
-  contactEmail: "lejuste.s09@gmail.com",
+  // A Cloudflare Email Routing address that forwards to the owner's private inbox
+  // (set 23 July 2026), so the public Contact/Privacy/Terms pages never expose a
+  // personal Gmail. Change here in one line if the forwarding address ever moves.
+  contactEmail: "contact@serverkakoulabs.org",
   // TODO(owner): e.g. "Reviewed by Jane Doe, CFP®" — a named, credentialed
   // reviewer is a strong E-E-A-T signal for financial content, but it must be
   // genuine, so it stays empty rather than invented.
