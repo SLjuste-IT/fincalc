@@ -1,0 +1,6 @@
+{
+  // Live Server must serve dist/ (the built site) as its root: the pages use
+  // root-relative links (/calc/tvm), and the repo root no longer has an
+  // index.html — the old SPA there was deleted (see DEPLOY.md §9).
+  "liveServer.settings.root": "/dist"
+}

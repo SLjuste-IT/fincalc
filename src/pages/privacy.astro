@@ -1,0 +1,166 @@
+---
+import Base from "../layouts/Base.astro";
+import { SITE } from "../data/site.js";
+
+const title = "Privacy Policy — KakouCalc";
+const description =
+  "How KakouCalc handles your data: calculator inputs never leave your browser, no accounts, no tracking by us — plus the required disclosures about hosting, fonts and advertising.";
+
+// Policy dates are the policy's own, independent of the calculator review cycle.
+const effective = "23 July 2026";
+const effectiveISO = "2026-07-23";
+
+const pageSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description,
+  url: new URL("/privacy", Astro.site).href,
+  dateModified: effectiveISO,
+  publisher: { "@type": "Organization", name: SITE.org, url: Astro.site?.href },
+};
+---
+
+<Base
+  title={title}
+  description={description}
+  breadcrumbs={[{ name: "Home", url: "/" }, { name: "Privacy Policy" }]}
+  jsonLd={[pageSchema]}
+>
+  <section class="calc-guide doc-page">
+    <div class="guide-block">
+      <h1>Privacy Policy</h1>
+      <p>
+        This policy explains what information is (and is not) handled when you use KakouCalc, and the
+        choices you have. The short version: <strong>the numbers you type into our calculators never
+        leave your device</strong>, we require no account, and KakouCalc's own code sets no cookies and
+        runs no analytics. The rest of this page covers the third-party services every website relies
+        on — hosting, fonts, and the advertising that keeps the site free.
+      </p>
+      <p class="guide-aside">Effective date: {effective}.</p>
+    </div>
+
+    <div class="guide-block">
+      <h2>Your calculator inputs stay on your device</h2>
+      <p>
+        Every calculator on this site runs entirely in your browser. The figures you enter — incomes,
+        balances, rates, debts — are processed locally by JavaScript on your device. They are
+        <strong>never transmitted to our servers, stored by us, or shared with anyone</strong>. When you
+        close the page, they are gone.
+      </p>
+    </div>
+
+    <div class="guide-block">
+      <h2>Information we do not collect</h2>
+      <p>
+        KakouCalc has no user accounts, no sign-up, no newsletters, and no forms that submit data to
+        us. We do not collect names, email addresses, financial details, or any other personal
+        information through the site, and we do not run our own analytics or tracking scripts. We do
+        not sell personal information — we do not have any to sell.
+      </p>
+    </div>
+
+    <div class="guide-block">
+      <h2>Local storage (your theme choice)</h2>
+      <p>
+        The site remembers one preference — light or dark theme — using your browser's
+        <code>localStorage</code>. This value stays in your browser, is never sent anywhere, contains no
+        personal information, and you can clear it at any time through your browser settings. KakouCalc's
+        own code sets no cookies.
+      </p>
+    </div>
+
+    <div class="guide-block">
+      <h2>Hosting (Cloudflare)</h2>
+      <p>
+        The site is served by Cloudflare Pages. Like virtually all web hosts, Cloudflare processes
+        standard technical data when your browser requests a page — such as your IP address, browser
+        type, and the pages requested — for security, abuse prevention, and performance, and may set
+        strictly-necessary cookies for those purposes. This happens on Cloudflare's infrastructure under{" "}
+        <a href="https://www.cloudflare.com/privacypolicy/" rel="noopener">Cloudflare's privacy policy</a>;
+        we do not receive or keep server logs ourselves.
+      </p>
+    </div>
+
+    <div class="guide-block">
+      <h2>Fonts (Google Fonts)</h2>
+      <p>
+        Pages load typefaces from Google Fonts. When your browser fetches those font files from
+        Google's servers, Google receives the technical details of that request (including your IP
+        address), governed by{" "}
+        <a href="https://policies.google.com/privacy" rel="noopener">Google's privacy policy</a>. The
+        font requests do not tell Google what you typed into any calculator.
+      </p>
+    </div>
+
+    <div class="guide-block">
+      <h2>Advertising (Google AdSense)</h2>
+      <p>
+        KakouCalc is supported by advertising served through Google AdSense — that is what keeps every
+        calculator free. Where ads are shown:
+      </p>
+      <p>
+        Third-party vendors, including Google, use cookies to serve ads based on your prior visits to
+        this website and other websites. Google's use of advertising cookies enables it and its
+        partners to serve ads to you based on your visit to this site and/or other sites on the
+        Internet.
+      </p>
+      <p>
+        You may opt out of personalized advertising by visiting{" "}
+        <a href="https://www.google.com/settings/ads" rel="noopener">Google Ads Settings</a>. You can
+        also opt out of many other third-party vendors' use of cookies for personalized advertising at{" "}
+        <a href="https://www.aboutads.info/choices" rel="noopener">www.aboutads.info/choices</a>.
+      </p>
+      <p>
+        Where required by law (for example in the EEA, UK, or certain US states), you will be asked for
+        consent before advertising cookies are used, and non-personalized ads may be shown instead if
+        you decline.
+      </p>
+    </div>
+
+    <div class="guide-block">
+      <h2>Embedded calculators on other sites</h2>
+      <p>
+        Other websites may embed our calculators using the widget we provide. The same privacy
+        behavior applies there: the embedded calculator runs in your browser and your inputs are not
+        sent to us. The page hosting the widget is governed by that site's own privacy policy.
+      </p>
+    </div>
+
+    <div class="guide-block">
+      <h2>External links</h2>
+      <p>
+        Our guides and blog articles link to outside resources (for example, government data sources).
+        Once you leave KakouCalc, the destination site's privacy practices apply — we encourage you to
+        review them.
+      </p>
+    </div>
+
+    <div class="guide-block">
+      <h2>Children's privacy</h2>
+      <p>
+        KakouCalc is a general-audience educational site and is not directed at children under 13. We
+        do not knowingly collect personal information from anyone, including children.
+      </p>
+    </div>
+
+    <div class="guide-block">
+      <h2>Changes to this policy</h2>
+      <p>
+        If our practices change — for example, if we ever add analytics or a contact form — this page
+        will be updated and the effective date above revised. Material changes will be visible here
+        before they take effect.
+      </p>
+    </div>
+
+    <div class="guide-block">
+      <h2>Contact</h2>
+      <p>
+        Questions about this policy or your privacy? Email{" "}
+        <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a> or see the{" "}
+        <a href="/contact">contact page</a>. If you email us, we receive your address and message and
+        use them only to reply.
+      </p>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,79 @@
+---
+import Base from "../layouts/Base.astro";
+import { CALC_INDEX } from "../lib/calculators.js";
+import { SITE } from "../data/site.js";
+
+const total = Object.keys(CALC_INDEX).length;
+const title = "About KakouCalc";
+const description =
+  "KakouCalc is a free, independent suite of financial calculators — no sign-up, no tracking of your inputs, and every result independently verified.";
+
+const pageSchema = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  name: title,
+  description,
+  url: new URL("/about", Astro.site).href,
+  dateModified: SITE.updatedISO,
+  publisher: { "@type": "Organization", name: SITE.org, url: Astro.site?.href },
+};
+---
+
+<Base
+  title={title}
+  description={description}
+  breadcrumbs={[{ name: "Home", url: "/" }, { name: "About" }]}
+  jsonLd={[pageSchema]}
+>
+  <section class="calc-guide doc-page">
+    <div class="guide-block">
+      <h1>About KakouCalc</h1>
+      <p>
+        KakouCalc is a free suite of {total} financial calculators — loans and mortgages, investing,
+        retirement, credit cards, auto financing, and everyday money math — gathered in one fast,
+        no-nonsense place. No sign-up, no paywall, and instant results.
+      </p>
+    </div>
+
+    <div class="guide-block">
+      <h2>What we stand for</h2>
+      <dl class="guide-glossary">
+        <div class="guide-term">
+          <dt>Accuracy first</dt>
+          <dd>Standard formulas, and every calculator checked a second, independent way by an automated test suite. See our <a href="/methodology">methodology</a>.</dd>
+        </div>
+        <div class="guide-term">
+          <dt>Your privacy</dt>
+          <dd>Calculations run in your browser. What you type is never sent to a server, saved, or shared.</dd>
+        </div>
+        <div class="guide-term">
+          <dt>Genuinely free</dt>
+          <dd>No account, no trial, no locked features. Every calculator and guide is open to everyone.</dd>
+        </div>
+        <div class="guide-term">
+          <dt>Plain explanations</dt>
+          <dd>The most-used calculators include a guide — what the tool does, the formula, a worked example, key terms, and FAQs — so you understand the number, not just read it.</dd>
+        </div>
+      </dl>
+    </div>
+
+    <div class="guide-block">
+      <h2>Editorial independence</h2>
+      <p>
+        KakouCalc is independent. The calculators and guides are for education and planning — they are
+        not financial, investment, tax, or legal advice. For decisions that matter, verify the figures
+        and consult a qualified professional. How we build and check everything is documented on the{" "}
+        <a href="/methodology">methodology page</a>.
+      </p>
+    </div>
+
+    <div class="guide-block">
+      <h2>Contact</h2>
+      <p>
+        Questions, corrections, or a calculator you'd like to see? Email{" "}
+        <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a>.
+      </p>
+      <p class="guide-aside">Last updated {SITE.updated}.</p>
+    </div>
+  </section>
+</Base>

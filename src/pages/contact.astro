@@ -1,0 +1,88 @@
+---
+import Base from "../layouts/Base.astro";
+import { SITE } from "../data/site.js";
+
+const title = "Contact — KakouCalc";
+const description =
+  "Get in touch with KakouCalc — report a calculation error, suggest a calculator, ask about embedding, or raise a privacy question.";
+
+const effectiveISO = "2026-07-23";
+
+const pageSchema = {
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  name: title,
+  description,
+  url: new URL("/contact", Astro.site).href,
+  dateModified: effectiveISO,
+  publisher: { "@type": "Organization", name: SITE.org, url: Astro.site?.href },
+};
+---
+
+<Base
+  title={title}
+  description={description}
+  breadcrumbs={[{ name: "Home", url: "/" }, { name: "Contact" }]}
+  jsonLd={[pageSchema]}
+>
+  <section class="calc-guide doc-page">
+    <div class="guide-block">
+      <h1>Contact us</h1>
+      <p>
+        The fastest way to reach KakouCalc is email:{" "}
+        <a href={`mailto:${SITE.contactEmail}`}><strong>{SITE.contactEmail}</strong></a>
+      </p>
+      <p>
+        Messages go directly to the site's operator and are read personally. There is no contact form
+        by design — the site collects no data, and email keeps it that way. If you write to us, we
+        receive your address and message and use them only to reply (see the{" "}
+        <a href="/privacy">Privacy Policy</a>).
+      </p>
+    </div>
+
+    <div class="guide-block">
+      <h2>What to write about</h2>
+      <dl class="guide-glossary">
+        <div class="guide-term">
+          <dt>Report an error</dt>
+          <dd>
+            Think a calculator gave a wrong figure? Send the calculator's name, the exact inputs you
+            used, the result you got, and the result you expected. Accuracy reports get first
+            priority — every report is checked against our{" "}
+            <a href="/methodology">verification suite</a> and fixed if confirmed.
+          </dd>
+        </div>
+        <div class="guide-term">
+          <dt>Suggest a calculator</dt>
+          <dd>
+            Missing a tool you need? Describe what it should compute and, if you can, the inputs
+            you'd expect it to ask for.
+          </dd>
+        </div>
+        <div class="guide-term">
+          <dt>Embedding &amp; partnerships</dt>
+          <dd>
+            The <a href="/terms">embed widget</a> is free to use straight from any calculator page.
+            Write in for anything beyond that — custom sizing, multiple widgets, or press.
+          </dd>
+        </div>
+        <div class="guide-term">
+          <dt>Privacy &amp; policy</dt>
+          <dd>
+            Questions about the <a href="/privacy">Privacy Policy</a> or{" "}
+            <a href="/terms">Terms of Service</a>, or about an ad shown on the site.
+          </dd>
+        </div>
+      </dl>
+    </div>
+
+    <div class="guide-block">
+      <h2>One thing we can't help with</h2>
+      <p>
+        We cannot give personal financial advice — not by email, and not through the calculators. The
+        tools are educational; for decisions about your own money, please consult a qualified
+        professional. See <a href="/about">about us</a> for how the site is run.
+      </p>
+    </div>
+  </section>
+</Base>

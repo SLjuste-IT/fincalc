@@ -1,0 +1,252 @@
+---
+import Base from "../../layouts/Base.astro";
+import { CALC_INDEX, CATEGORIES } from "../../lib/calculators.js";
+import { fieldHtml, resultHtml } from "../../lib/render.js";
+import { resultChart } from "../../lib/charts.js";
+import { GUIDES } from "../../data/guides.js";
+import { fieldsWithExamples } from "../../data/examples.js";
+import { shortName } from "../../lib/display.js";
+import { SITE } from "../../data/site.js";
+import { explainerHtml } from "../../lib/explain.js";
+
+// This is the whole point of the migration. CALC_INDEX already carried
+// id/name/desc/catName for every calculator, so all 77 real URLs fall out of the
+// data that already existed — no per-page files to hand-maintain.
+export function getStaticPaths() {
+  return Object.values(CALC_INDEX).map((calc) => ({
+    params: { id: calc.id },
+    props: { calc },
+  }));
+}
+
+const { calc } = Astro.props;
+
+// The editorial layer. Only the calculators with a reviewed guide render one; the
+// rest fall through to the calculator alone until their content is written and
+// checked. related resolves ids to real calculators so a renamed/removed id can
+// never ship a dead internal link.
+const guide = GUIDES[calc.id];
+
+// Related calculators on EVERY page (internal linking spreads crawl equity and
+// keeps visitors moving through the site). Guided calculators use their curated
+// cross-topic picks; the rest fall back to same-category siblings, so no page is
+// ever a dead end. Resolved through CALC_INDEX so a stale id can't ship a 404.
+const siblingCat = CATEGORIES.find((c) => c.calcs.some((x) => x.id === calc.id));
+const siblings = siblingCat ? siblingCat.calcs.filter((x) => x.id !== calc.id).map((x) => x.id) : [];
+const relatedIds = guide?.related?.length ? guide.related : siblings.slice(0, 8);
+const relatedCalcs = relatedIds.map((id) => CALC_INDEX[id]).filter(Boolean);
+
+// Render the form AND a real result at build time, both driven by the calculator's
+// realistic example inputs (src/data/examples.js). The shipped HTML therefore
+// contains a genuine worked example — actual computed numbers a crawler indexes
+// and a visitor sees before any JavaScript executes — not a "$0.00" shell.
+const displayFields = fieldsWithExamples(calc);
+const fieldsHtml = displayFields.map(fieldHtml).join("");
+
+const defaults = {};
+for (const f of displayFields) {
+  defaults[f.key] =
+    f.type === "select" ? String(f.default) : f.type === "text" ? f.default : Number(f.default);
+}
+
+// Every calculator now has example inputs, so compute() returns a real result.
+// The neutral fallback remains for the lone exception (date_calc uses live dates)
+// and as a guard: a broken example must never ship an error as static content.
+let prerenderedResult;
+// The structured example result is also handed to the explainer layer, which
+// narrates a real worked example from it. Null unless a valid figure computed, so
+// a calculator without an example never narrates a bogus one.
+let exampleResult = null;
+try {
+  const r = calc.compute(defaults);
+  const ok = r && r.primary && !r.error;
+  exampleResult = ok ? r : null;
+  prerenderedResult = ok
+    ? resultHtml(r) + resultChart(calc, defaults, r)
+    : `<div class="placeholder">Enter your figures to see results.</div>`;
+} catch (e) {
+  prerenderedResult = `<div class="placeholder">Enter your figures to see results.</div>`;
+}
+
+const title = `${calc.name} — KakouCalc`;
+
+// BreadcrumbList is an actually-supported rich result (unlike FAQPage, removed
+// 2026-05-07) and it only became expressible now that these are real URLs.
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: new URL("/", Astro.site).href },
+    { "@type": "ListItem", position: 2, name: calc.catName },
+    { "@type": "ListItem", position: 3, name: calc.name, item: new URL(`/calc/${calc.id}`, Astro.site).href },
+  ],
+};
+
+// Embed snippet — the backlink engine. The two visible <a> tags in this snippet
+// are the actual backlinks a host site plants when it pastes the widget, which is
+// how a calculator site earns domain authority. Absolute URLs from Astro.site so
+// the snippet works off-site. Height scales with the field count.
+const origin = Astro.site ? Astro.site.origin : "";
+const embedUrl = `${origin}/embed/${calc.id}`;
+const calcUrl = `${origin}/calc/${calc.id}`;
+const embedHeight = 380 + displayFields.length * 58;
+const embedSnippet = `<iframe src="${embedUrl}" title="${calc.name} by KakouCalc" width="100%" height="${embedHeight}" style="border:1px solid #e5e7eb;border-radius:10px;max-width:520px" loading="lazy"></iframe>
+<p style="font:13px/1.5 system-ui,sans-serif;margin:8px 0 0"><a href="${calcUrl}">${calc.name}</a> by <a href="${origin}">KakouCalc</a></p>`;
+---
+
+<Base
+  title={title}
+  description={calc.desc}
+  activeId={calc.id}
+  breadcrumbs={[{ name: "Home", url: "/" }, { name: calc.catName }, { name: calc.name }]}
+  jsonLd={[breadcrumbSchema]}
+>
+  <section id="calc" class="view">
+    <header class="calc-head">
+      <span class="calc-icon">{calc.catIcon || "📊"}</span>
+      <div class="calc-head-text">
+        <h1>{calc.name}</h1>
+        <p>{calc.desc}</p>
+        <p class="calc-byline">
+          Reviewed by <a href="/methodology">{SITE.editorial}</a> · Updated {SITE.updated}
+        </p>
+      </div>
+    </header>
+    <div class="calc-body">
+      <form id="calcForm" class="calc-form" autocomplete="off" data-calc-id={calc.id}>
+        <Fragment set:html={fieldsHtml} />
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="calcBtn">Calculate</button>
+          <button type="button" class="btn" id="resetBtn">Reset</button>
+        </div>
+      </form>
+      <div class="calc-result-panel">
+        <div id="calcResult" class="calc-result" aria-live="polite">
+          <Fragment set:html={prerenderedResult} />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="embed-offer">
+    <details>
+      <summary>Embed this calculator on your site</summary>
+      <div class="embed-offer-body">
+        <p>
+          Free to embed. Paste this where you want the calculator to appear — the link back to KakouCalc is
+          all we ask, and it's baked in.
+        </p>
+        <textarea id="embedSnippet" class="embed-snippet" readonly rows="4" spellcheck="false" aria-label="Embed code">{embedSnippet}</textarea>
+        <div class="embed-offer-actions">
+          <button type="button" class="btn primary" id="embedCopyBtn">Copy code</button>
+          <a class="btn" href={`/embed/${calc.id}`} target="_blank" rel="noopener">Preview&nbsp;↗</a>
+        </div>
+      </div>
+    </details>
+  </section>
+
+  {
+    guide ? (
+      <section class="calc-guide" aria-label={`About the ${calc.name}`}>
+        <div class="guide-block">
+          <h2 id="what">What is the {calc.name}?</h2>
+          <p set:html={guide.intro} />
+        </div>
+
+        <div class="guide-block">
+          <h2>The formula</h2>
+          <p>{guide.formula.lead}</p>
+          <pre class="guide-formula"><code>{guide.formula.expression}</code></pre>
+          <dl class="guide-vars">
+            {guide.formula.where.map(([sym, mean]) => (
+              <div class="guide-var">
+                <dt>{sym}</dt>
+                <dd>{mean}</dd>
+              </div>
+            ))}
+          </dl>
+          {guide.formula.note && <p class="guide-aside" set:html={guide.formula.note} />}
+        </div>
+
+        <div class="guide-block">
+          <h2>Worked example</h2>
+          <p set:html={guide.example.scenario} />
+          <p class="guide-example-result" set:html={guide.example.result} />
+          <p class="guide-aside">Prefer your own numbers? Enter them in the calculator above — it recomputes instantly.</p>
+        </div>
+
+        <div class="guide-block">
+          <h2>Key terms</h2>
+          <dl class="guide-glossary">
+            {guide.terms.map(([term, def]) => (
+              <div class="guide-term">
+                <dt>{term}</dt>
+                <dd>{def}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+
+        <div class="guide-block">
+          <h2>Frequently asked questions</h2>
+          <div class="guide-faq">
+            {guide.faqs.map(([q, a]) => (
+              <div class="guide-faq-item">
+                <h3>{q}</h3>
+                <p set:html={a} />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <p class="guide-meta">
+          These guides are educational information, not financial advice. See our <a href="/methodology">methodology</a>.
+        </p>
+      </section>
+    ) : (
+      <section class="calc-guide" aria-label={`About the ${calc.name}`}>
+        <Fragment set:html={explainerHtml(calc, displayFields, exampleResult)} />
+      </section>
+    )
+  }
+
+  {
+    relatedCalcs.length > 0 && (
+      <nav class="related-calcs" aria-label="Related calculators">
+        <h2>Related calculators</h2>
+        <ul>
+          {relatedCalcs.map((c) => (
+            <li>
+              <a href={`/calc/${c.id}`} title={c.name}>
+                {shortName(c.name)}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    )
+  }
+</Base>
+
+<script>
+  import "../../scripts/calculator.js";
+</script>
+
+<script>
+  // Copy the embed snippet. Clipboard API with a legacy execCommand fallback.
+  const btn = document.getElementById("embedCopyBtn");
+  const ta = document.getElementById("embedSnippet");
+  if (btn && ta) {
+    btn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(ta.value);
+      } catch (e) {
+        ta.select();
+        document.execCommand("copy");
+      }
+      const label = btn.textContent;
+      btn.textContent = "Copied!";
+      setTimeout(() => (btn.textContent = label), 1600);
+    });
+  }
+</script>

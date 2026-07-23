@@ -1,0 +1,82 @@
+---
+import Base from "../layouts/Base.astro";
+import { CATEGORIES, CALC_INDEX } from "../lib/calculators.js";
+import { shortName } from "../lib/display.js";
+
+const total = Object.keys(CALC_INDEX).length;
+const title = "KakouCalc — Financial & ROI Calculators";
+const description =
+  "A complete suite of free financial, investment, loan, retirement and stock calculators.";
+
+// Every calculator link is now a real crawlable <a href="/calc/...">, so this page
+// passes link equity to all 77 of them. Under the hash router these were fragments
+// and the calculators were invisible to search engines.
+---
+
+<Base title={title} description={description}>
+  <section id="home" class="view">
+    <div class="hero">
+      <div class="hero-inner">
+        <div class="hero-copy">
+          <h1>Make smarter money decisions.</h1>
+          <p>
+            A complete, free suite of financial, investment, loan, retirement and stock calculators — all
+            in one place. No sign-up, instant results.
+          </p>
+          <div class="hero-stats" id="heroStats">
+            <div class="stat-pill"><strong>{total}+</strong><span>Calculators</span></div>
+            <div class="stat-pill"><strong>{CATEGORIES.length}</strong><span>Categories</span></div>
+            <div class="stat-pill"><strong>100%</strong><span>Free</span></div>
+          </div>
+        </div>
+
+        {/* Decorative product preview — a real calculator result in the "Statement"
+            style (engine-exact compound-interest figures), so the hero shows what
+            the tools produce rather than a stock photo. Hidden from assistive tech. */}
+        <div class="hero-visual" aria-hidden="true">
+          <div class="hv-card">
+            <div class="hv-crumb">Compound Interest</div>
+            <div class="hv-label">Future value</div>
+            <div class="hv-figure">$144,572.72</div>
+            <div class="hv-rule"></div>
+            <svg class="hv-chart" viewBox="0 0 320 96" preserveAspectRatio="none">
+              <path class="hv-area" d="M0 85 C 90 83, 150 76, 200 62 C 250 48, 292 24, 320 11 L320 96 L0 96 Z" />
+              <path class="hv-line" d="M0 85 C 90 83, 150 76, 200 62 C 250 48, 292 24, 320 11" />
+            </svg>
+            <div class="hv-rows">
+              <div class="hv-row"><span>Total contributions</span><span>$58,000.00</span></div>
+              <div class="hv-row"><span>Interest earned</span><span>$86,572.72</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="categoryGrid" class="category-grid">
+      {
+        CATEGORIES.map((cat) => (
+          <div class="cat-card">
+            <h2>
+              <span class="ico" aria-hidden="true">{cat.icon}</span>
+              {cat.name}
+              <span class="count-badge">{cat.calcs.length}</span>
+            </h2>
+            <ul>
+              {cat.calcs.map((c) => (
+                <li>
+                  {/* title carries the full name so hover and assistive tech still get it */}
+                  <a href={`/calc/${c.id}`} title={c.name}>
+                    {shortName(c.name)}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+</Base>
+
+<script>
+  import "../scripts/hero.js";
+</script>

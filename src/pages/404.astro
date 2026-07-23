@@ -1,0 +1,39 @@
+---
+import Base from "../layouts/Base.astro";
+import { CALC_INDEX } from "../lib/calculators.js";
+import { shortName } from "../lib/display.js";
+
+const title = "Page not found — KakouCalc";
+const description = "That page doesn't exist. Browse all free financial calculators from the homepage.";
+
+// A handful of the most-used tools, resolved through CALC_INDEX so a renamed or
+// removed id can never ship a dead link from the error page of all places.
+const popularIds = ["loan_basic", "compound", "roi", "retirement_planner", "cc_payoff", "home_afford"];
+const popular = popularIds.map((id) => CALC_INDEX[id]).filter(Boolean);
+---
+
+<Base title={title} description={description} breadcrumbs={[{ name: "Home", url: "/" }, { name: "Not found" }]}>
+  <section class="calc-guide doc-page">
+    <div class="guide-block">
+      <h1>Page not found</h1>
+      <p>
+        The page you're looking for doesn't exist — it may have moved, or the address may have a typo.
+        Everything on KakouCalc is reachable from the <a href="/">homepage</a>, or search the
+        calculators from the bar above.
+      </p>
+    </div>
+
+    <div class="guide-block">
+      <h2>Popular calculators</h2>
+      <nav class="related-calcs" aria-label="Popular calculators" style="margin:0;padding:0;border:0">
+        <ul>
+          {popular.map((c) => (
+            <li>
+              <a href={`/calc/${c.id}`} title={c.name}>{shortName(c.name)}</a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+  </section>
+</Base>

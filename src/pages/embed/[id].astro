@@ -1,0 +1,99 @@
+---
+// Embeddable widget: a compact, standalone version of each calculator meant to be
+// iframed on other sites. This is the backlink engine — the copy-paste snippet on
+// the calculator page (see calc/[id].astro) ships a visible attribution link back
+// to KakouCalc, and every site that embeds a calculator plants one more link.
+//
+// noindex + canonical → the real /calc/<id> page: the widget must not compete with
+// or duplicate the indexable calculator in search. It is excluded from the sitemap
+// (astro.config.mjs). It reuses the same engine, form, result and chart, and the
+// same client script, so it stays byte-for-byte consistent with the full page.
+import { CALC_INDEX } from "../../lib/calculators.js";
+import { fieldHtml, resultHtml } from "../../lib/render.js";
+import { resultChart } from "../../lib/charts.js";
+import { fieldsWithExamples } from "../../data/examples.js";
+import "../../styles/global.css";
+
+export function getStaticPaths() {
+  return Object.values(CALC_INDEX).map((calc) => ({ params: { id: calc.id }, props: { calc } }));
+}
+
+const { calc } = Astro.props;
+const displayFields = fieldsWithExamples(calc);
+const fieldsHtml = displayFields.map(fieldHtml).join("");
+
+const defaults = {};
+for (const f of displayFields) {
+  defaults[f.key] =
+    f.type === "select" ? String(f.default) : f.type === "text" ? f.default : Number(f.default);
+}
+
+let prerendered;
+try {
+  const r = calc.compute(defaults);
+  prerendered =
+    r && r.primary && !r.error
+      ? resultHtml(r) + resultChart(calc, defaults, r)
+      : `<div class="placeholder">Enter your figures to see results.</div>`;
+} catch (e) {
+  prerendered = `<div class="placeholder">Enter your figures to see results.</div>`;
+}
+
+const canonical = new URL(`/calc/${calc.id}`, Astro.site).href;
+const title = `${calc.name} — KakouCalc`;
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <script is:inline>
+      // Host sites can request a theme via ?theme=light|dark; otherwise the brand
+      // dark default stands. Applied before paint to avoid a flash.
+      try {
+        var p = new URLSearchParams(location.search).get("theme");
+        if (p === "light" || p === "dark") document.documentElement.dataset.theme = p;
+      } catch (e) {}
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="robots" content="noindex,follow" />
+    <link rel="canonical" href={canonical} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@600;700&family=IBM+Plex+Sans+Condensed:wght@600&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="embed-body">
+    <main class="embed">
+      <header class="embed-head">
+        <a class="embed-brand" href={canonical} target="_blank" rel="noopener" aria-label="KakouCalc">
+          <span class="brand-mark">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><path d="M8 10h.01"></path><path d="M12 10h.01"></path><path d="M16 10h.01"></path><path d="M8 14h.01"></path><path d="M12 14h.01"></path><path d="M8 18h.01"></path><path d="M12 18h.01"></path><line x1="16" y1="14" x2="16" y2="18"></line></svg>
+          </span>
+        </a>
+        <h1>{calc.name}</h1>
+      </header>
+
+      <form id="calcForm" class="calc-form" autocomplete="off" data-calc-id={calc.id}>
+        <Fragment set:html={fieldsHtml} />
+        <div class="btn-row">
+          <button type="button" class="btn primary" id="calcBtn">Calculate</button>
+          <button type="button" class="btn" id="resetBtn">Reset</button>
+        </div>
+      </form>
+
+      <div id="calcResult" class="calc-result" aria-live="polite">
+        <Fragment set:html={prerendered} />
+      </div>
+
+      <a class="embed-credit" href={canonical} target="_blank" rel="noopener">Powered by KakouCalc ↗</a>
+    </main>
+
+    <script>
+      import "../../scripts/calculator.js";
+    </script>
+  </body>
+</html>

@@ -1,0 +1,48 @@
+---
+import Base from "../../layouts/Base.astro";
+import { ARTICLES } from "../../data/articles.js";
+
+const title = "Blog — Money guides & explainers — KakouCalc";
+const description =
+  "Plain-English guides to loans, mortgages, investing and retirement — each linked to a free calculator that runs your numbers.";
+const posts = Object.entries(ARTICLES);
+
+const pageSchema = {
+  "@context": "https://schema.org",
+  "@type": "Blog",
+  name: "KakouCalc Blog",
+  description,
+  url: new URL("/blog", Astro.site).href,
+};
+---
+
+<Base
+  title={title}
+  description={description}
+  breadcrumbs={[{ name: "Home", url: "/" }, { name: "Blog" }]}
+  jsonLd={[pageSchema]}
+>
+  <section class="calc-guide doc-page">
+    <div class="guide-block">
+      <h1>Money guides &amp; explainers</h1>
+      <p>
+        Plain-English answers to the money questions people actually ask — each one linked to a free
+        calculator that runs your numbers.
+      </p>
+    </div>
+
+    <ul class="blog-list">
+      {
+        posts.map(([slug, a]) => (
+          <li class="blog-card">
+            <a href={`/blog/${slug}`}>
+              <h2>{a.title}</h2>
+              <p>{a.description}</p>
+              <span class="blog-card-more">Read the guide →</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</Base>

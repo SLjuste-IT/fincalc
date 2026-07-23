@@ -1,0 +1,129 @@
+---
+import Base from "../layouts/Base.astro";
+import { SITE } from "../data/site.js";
+
+const title = "Methodology & Editorial Standards — KakouCalc";
+const description =
+  "How KakouCalc's calculators are built, verified and kept current — the formulas, the independent automated testing, the data sources, and our editorial standards.";
+
+// A WebPage with a real dateModified is an honest, supported signal. No invented
+// author or rating — the publisher is the site, and every claim below is checkable.
+const pageSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description,
+  url: new URL("/methodology", Astro.site).href,
+  dateModified: SITE.updatedISO,
+  publisher: { "@type": "Organization", name: SITE.org, url: Astro.site?.href },
+};
+---
+
+<Base
+  title={title}
+  description={description}
+  breadcrumbs={[{ name: "Home", url: "/" }, { name: "Methodology" }]}
+  jsonLd={[pageSchema]}
+>
+  <section class="calc-guide doc-page">
+    <div class="guide-block">
+      <h1>Methodology &amp; editorial standards</h1>
+      <p>
+        KakouCalc publishes {`free financial calculators`} covering loans, investing, retirement,
+        credit, and more. Because these are money decisions, accuracy is the whole product. This page
+        explains exactly how the calculators are built, how their math is verified, where the reference
+        data comes from, and how the content is reviewed — so you can judge the numbers for yourself.
+      </p>
+      <p class="guide-aside">Last reviewed {SITE.updated}.</p>
+    </div>
+
+    <div class="guide-block">
+      <h2>Standard, published formulas</h2>
+      <p>
+        Every calculator uses the standard, textbook formula for its problem — not a proprietary or
+        approximated one. Loan and mortgage figures come from the ordinary amortization formula; time
+        value of money uses the same present-value and future-value equations as a financial calculator;
+        option prices use Black-Scholes; stock valuations use the Gordon growth and multi-stage dividend
+        discount models. The math is the math the field already agrees on.
+      </p>
+      <p>
+        Calculations run entirely in your browser. Nothing you type is sent to a server, stored, or
+        shared — there is no account, and no analytics on your inputs.
+      </p>
+    </div>
+
+    <div class="guide-block">
+      <h2>Independent, automated verification</h2>
+      <p>
+        This is the part most calculator sites can't claim. Every calculator is checked by an automated
+        test suite that computes each result a <strong>second, independent way</strong> and confirms the
+        two agree — so a mistake can't hide by agreeing with itself. The independent check is either a
+        formula typed from a finance textbook, a brute-force month-by-month simulation, or a
+        canonical published value.
+      </p>
+      <p>
+        For example, the Black-Scholes calculator is checked against the textbook benchmark
+        (S=100, K=100, T=1, r=5%, σ=20% → call price 10.4506); loan interest is checked against a
+        month-by-month amortization simulation; and every calculator is confirmed to return a real,
+        finite figure rather than an error on ordinary inputs. The suite currently runs
+        <strong>hundreds of individual checks</strong>, and the site is not shipped unless they all pass.
+      </p>
+    </div>
+
+    <div class="guide-block">
+      <h2>Reference data &amp; how current it is</h2>
+      <p>
+        A few calculators depend on outside data, which we label rather than let you assume is live:
+      </p>
+      <dl class="guide-glossary">
+        <div class="guide-term">
+          <dt>Inflation (CPI)</dt>
+          <dd>US Consumer Price Index (CPI-U) annual averages. A year's figure is an annual average, so it only appears once that year is complete.</dd>
+        </div>
+        <div class="guide-term">
+          <dt>Exchange rates</dt>
+          <dd>Reference rates refreshed at build time and shown with an "as of" date in the Currency Converter. Rates move continuously between updates — treat them as indicative and check a live source before acting.</dd>
+        </div>
+        <div class="guide-term">
+          <dt>Tax brackets &amp; RMD tables</dt>
+          <dd>US federal figures, stamped with their tax year. Tax rules change annually and vary by state — confirm the current year's figures for your situation.</dd>
+        </div>
+      </dl>
+    </div>
+
+    <div class="guide-block">
+      <h2>Review, updates &amp; corrections</h2>
+      <p>
+        Each calculator guide carries a "reviewed" date, and this page carries the site's last-reviewed
+        date ({SITE.updated}). When we find or are told about an error, we fix the underlying formula —
+        which the verification suite then locks in so the same mistake can't return — and update the
+        date. Found something that looks wrong? Tell us at{" "}
+        <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a> and we'll check it.
+      </p>
+    </div>
+
+    <div class="guide-block">
+      <h2>Educational information, not financial advice</h2>
+      <p>
+        KakouCalc is a set of tools and explanations for learning and planning. It is not financial,
+        investment, tax, or legal advice, and it can't account for your full personal situation. The
+        results rest on the assumptions you enter — real rates, returns, taxes, and fees vary. For
+        decisions that matter, verify the figures and talk to a qualified professional.
+      </p>
+    </div>
+
+    <div class="guide-block">
+      <h2>Who is behind KakouCalc</h2>
+      <p>
+        KakouCalc is an independent, free financial-calculator publisher. Read more on the{" "}
+        <a href="/about">About page</a>, or reach the team at{" "}
+        <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a>.
+      </p>
+      {
+        SITE.reviewer && (
+          <p><strong>{SITE.reviewer}</strong></p>
+        )
+      }
+    </div>
+  </section>
+</Base>

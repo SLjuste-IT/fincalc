@@ -1,0 +1,25 @@
+# Dependencies — reinstalled by the build (npm ci), never committed
+node_modules/
+
+# Build output — Cloudflare Pages regenerates this on every deploy.
+# Committing it is what caused the "stale dist" problem; keep it out.
+dist/
+
+# Astro build cache
+.astro/
+
+# Environment / secrets — SITE_URL and the optional FRED_API_KEY are set in the
+# Cloudflare Pages dashboard, never stored in the repo.
+.env
+.env.*
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+
+# Claude Code tooling (agent config, not part of the deployed site)
+.claude/

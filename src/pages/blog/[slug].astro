@@ -1,0 +1,103 @@
+---
+import Base from "../../layouts/Base.astro";
+import { CALC_INDEX } from "../../lib/calculators.js";
+import { ARTICLES } from "../../data/articles.js";
+import { SITE } from "../../data/site.js";
+import { shortName } from "../../lib/display.js";
+
+export function getStaticPaths() {
+  return Object.entries(ARTICLES).map(([slug, article]) => ({ params: { slug }, props: { slug, article } }));
+}
+
+const { slug, article } = Astro.props;
+const primaryCalc = CALC_INDEX[article.calc];
+const relatedCalcs = (article.related || []).map((id) => CALC_INDEX[id]).filter(Boolean);
+const title = `${article.title} — KakouCalc`;
+const url = new URL(`/blog/${slug}`, Astro.site).href;
+
+// BlogPosting with real datePublished/dateModified and an Organization author —
+// honest E-E-A-T. No fabricated human byline; the publisher is the site.
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: article.title,
+  description: article.description,
+  datePublished: article.published,
+  dateModified: article.updated,
+  author: { "@type": "Organization", name: "KakouCalc", url: Astro.site?.href },
+  publisher: { "@type": "Organization", name: "KakouCalc", url: Astro.site?.href },
+  mainEntityOfPage: url,
+};
+---
+
+<Base
+  title={title}
+  description={article.description}
+  breadcrumbs={[{ name: "Home", url: "/" }, { name: "Blog", url: "/blog" }, { name: article.title }]}
+  jsonLd={[articleSchema]}
+>
+  <article class="calc-guide doc-page">
+    <div class="guide-block">
+      <h1>{article.title}</h1>
+      <p class="article-byline">
+        Updated {SITE.updated} · Reviewed by <a href="/methodology">{SITE.editorial}</a>
+      </p>
+      <p set:html={article.intro} />
+    </div>
+
+    {
+      primaryCalc && (
+        <a class="article-cta" href={`/calc/${primaryCalc.id}`}>
+          <span class="article-cta-label">Run your numbers</span>
+          <span class="article-cta-name">{primaryCalc.name}&nbsp;→</span>
+        </a>
+      )
+    }
+
+    {
+      article.sections.map((s) => (
+        <div class="guide-block">
+          <h2>{s.h}</h2>
+          <Fragment set:html={s.body} />
+        </div>
+      ))
+    }
+
+    {
+      article.faqs && article.faqs.length > 0 && (
+        <div class="guide-block">
+          <h2>Frequently asked questions</h2>
+          <div class="guide-faq">
+            {article.faqs.map(([q, a]) => (
+              <div class="guide-faq-item">
+                <h3>{q}</h3>
+                <p set:html={a} />
+              </div>
+            ))}
+          </div>
+        </div>
+      )
+    }
+
+    {
+      relatedCalcs.length > 0 && (
+        <nav class="related-calcs" aria-label="Related calculators">
+          <h2>Related calculators</h2>
+          <ul>
+            {relatedCalcs.map((c) => (
+              <li>
+                <a href={`/calc/${c.id}`} title={c.name}>
+                  {shortName(c.name)}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )
+    }
+
+    <p class="guide-meta">
+      Educational information, not financial advice. See our <a href="/methodology">methodology</a>.
+    </p>
+  </article>
+</Base>

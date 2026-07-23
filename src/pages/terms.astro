@@ -1,0 +1,135 @@
+---
+import Base from "../layouts/Base.astro";
+import { SITE } from "../data/site.js";
+
+const title = "Terms of Service — KakouCalc";
+const description =
+  "The terms for using KakouCalc's free calculators and guides: educational use, no financial advice, accuracy limits, embedding rules, and acceptable use.";
+
+const effective = "23 July 2026";
+const effectiveISO = "2026-07-23";
+
+const pageSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  name: title,
+  description,
+  url: new URL("/terms", Astro.site).href,
+  dateModified: effectiveISO,
+  publisher: { "@type": "Organization", name: SITE.org, url: Astro.site?.href },
+};
+---
+
+<Base
+  title={title}
+  description={description}
+  breadcrumbs={[{ name: "Home", url: "/" }, { name: "Terms of Service" }]}
+  jsonLd={[pageSchema]}
+>
+  <section class="calc-guide doc-page">
+    <div class="guide-block">
+      <h1>Terms of Service</h1>
+      <p>
+        Welcome to KakouCalc. These terms govern your use of this website, its calculators, guides,
+        and embeddable widgets. By using the site you agree to them; if you do not agree, please do
+        not use the site. They are written in plain language on purpose — there is no fine print
+        doing extra work.
+      </p>
+      <p class="guide-aside">Effective date: {effective}.</p>
+    </div>
+
+    <div class="guide-block">
+      <h2>Educational use only — not financial advice</h2>
+      <p>
+        Every calculator, guide, article, and figure on KakouCalc is provided for
+        <strong>education and general information only</strong>. Nothing on this site is financial,
+        investment, tax, accounting, or legal advice, and nothing here is a recommendation to buy,
+        sell, borrow, refinance, or take any other financial action. Results are estimates driven
+        entirely by the assumptions you enter. Before making decisions that matter, verify the figures
+        independently and consult a qualified professional who knows your situation.
+      </p>
+    </div>
+
+    <div class="guide-block">
+      <h2>Accuracy and its limits</h2>
+      <p>
+        We work hard on accuracy — the formulas are standard, and every calculator is checked against
+        an independent automated test suite (see our <a href="/methodology">methodology</a>). Even so,
+        the site is provided <strong>“as is” and “as available,” without warranties of any kind</strong>,
+        express or implied. We do not guarantee that results are error-free, complete, current, or fit
+        for any particular purpose. Tax rules, rates, and reference data change; simplified models
+        cannot capture every real-world detail. If you find an error, please{" "}
+        <a href="/contact">tell us</a> — we check and fix reported issues.
+      </p>
+    </div>
+
+    <div class="guide-block">
+      <h2>Limitation of liability</h2>
+      <p>
+        To the fullest extent permitted by law, KakouCalc and its operator are not liable for any
+        loss or damage — direct or indirect — arising from your use of, or reliance on, this site and
+        its results. You are responsible for the financial decisions you make.
+      </p>
+    </div>
+
+    <div class="guide-block">
+      <h2>Your license to use the site</h2>
+      <p>
+        You may use the calculators freely, for personal or professional purposes, and you own the
+        numbers you compute. The site's content — text, guides, design, and code — belongs to
+        KakouCalc and may not be copied wholesale, republished, or presented as your own. Quoting brief
+        excerpts with a link back is welcome.
+      </p>
+    </div>
+
+    <div class="guide-block">
+      <h2>Embedding our calculators</h2>
+      <p>
+        We offer an official embed widget on each calculator page, and you are welcome to use it on
+        your own site free of charge, provided that: (1) you use the snippet as provided, including the
+        visible attribution links back to KakouCalc; (2) you do not present the calculator as your own
+        product or charge for access to it; and (3) your site does not pair the widget with unlawful,
+        deceptive, or harmful content. We may update the widgets at any time and may ask any site to
+        stop embedding at our discretion.
+      </p>
+    </div>
+
+    <div class="guide-block">
+      <h2>Acceptable use</h2>
+      <p>
+        Do not attempt to disrupt the site, probe or breach its security, scrape it at abusive rates,
+        or misrepresent its results (for example, by altering a figure and attributing it to
+        KakouCalc). That is the whole list — use the tools in good faith.
+      </p>
+    </div>
+
+    <div class="guide-block">
+      <h2>Advertising and third-party services</h2>
+      <p>
+        The site is supported by advertising (Google AdSense) and relies on third-party services for
+        hosting and fonts. Advertisers are responsible for their own content, and third-party services
+        are governed by their own terms and privacy policies. How these services handle data is
+        described in our <a href="/privacy">Privacy Policy</a>. Links to external sites are provided
+        for convenience; we do not control or endorse their content.
+      </p>
+    </div>
+
+    <div class="guide-block">
+      <h2>Changes to the site and these terms</h2>
+      <p>
+        Calculators and content may be added, changed, or removed at any time. These terms may be
+        revised occasionally; the effective date above will change when they are. Continuing to use
+        the site after a revision means you accept the updated terms.
+      </p>
+    </div>
+
+    <div class="guide-block">
+      <h2>Contact</h2>
+      <p>
+        Questions about these terms? Email{" "}
+        <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a> or use the{" "}
+        <a href="/contact">contact page</a>.
+      </p>
+    </div>
+  </section>
+</Base>
