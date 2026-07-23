@@ -69,6 +69,15 @@ const schemas = [siteSchema, orgSchema, ...jsonLd];
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <meta name="theme-color" content="#0a0b0d" />
+    {/* Google AdSense — account verification + Auto Ads (publisher
+        ca-pub-7652735657118192). is:inline so Astro emits it verbatim in the
+        <head> of every page, which is what AdSense's reviewer looks for. */}
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7652735657118192"
+      crossorigin="anonymous"
+      is:inline
+    ></script>
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
