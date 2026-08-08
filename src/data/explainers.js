@@ -24,7 +24,7 @@
 // ============================================================================
 
 // Bumped when this copy is reviewed for accuracy — the E-E-A-T "who checked, when".
-export const EXPLAINERS_REVIEWED = "23 July 2026";
+export const EXPLAINERS_REVIEWED = "8 August 2026";
 
 export const EXPLAINERS = {
   /* ------------------------------------------------ Finance & Investment */
@@ -119,6 +119,125 @@ export const EXPLAINERS = {
     ],
   },
 
+  tvm: {
+    method: {
+      lead: "The calculator holds four of the five time-value-of-money variables fixed and solves for the fifth, using the single equation that ties a present sum, a stream of level payments and a future sum together at one rate:",
+      expression: "PV·(1 + r)ⁿ + PMT·((1 + r)ⁿ − 1)/r·(1 + r·type) + FV = 0",
+      where: [
+        ["N", "the number of periods"],
+        ["r", "the interest rate per period"],
+        ["PV / FV", "the present value (today) and future value (at the end)"],
+        ["PMT", "the level payment made each period"],
+        ["type", "0 if payments fall at period-end, 1 if at the start"],
+      ],
+      note: "There is no closed form for the rate, so it is found numerically (bisection between −99% and 500%). The sign convention matters: money you pay out is negative, money you receive is positive — mixing the signs is the usual reason \"solve for rate\" returns no answer.",
+    },
+    terms: [
+      ["Present value", "What a future amount is worth today, discounted at a given rate."],
+      ["Future value", "What a present amount, plus any payments, grows to by the end."],
+      ["Period", "The unit the rate and the count share — the rate must match the periods (a 6% annual rate is 0.5% a month)."],
+      ["Annuity due", "Payments made at the start of each period rather than the end."],
+    ],
+    faqs: [
+      ["What's the sign convention?", "Outflows are negative, inflows positive — e.g. deposit PV as −1,000 and expect FV 2,000. Getting the signs wrong is what makes a \"solve for rate\" fail with no answer."],
+      ["Do the rate and N have to use the same units?", "Yes. If N is in months, the rate must be the monthly rate (annual ÷ 12). Pairing 6% with 360 months treats 6% as a <em>monthly</em> rate."],
+      ["What does payment timing change?", "Beginning-of-period (annuity due) payments each earn one extra period of interest, so they produce a higher future value and require a smaller payment than end-of-period."],
+    ],
+  },
+
+  bond: {
+    method: {
+      lead: "A bond's price is the present value of everything it pays: each coupon, plus the face value returned at maturity, all discounted at the market's required yield.",
+      expression: "Price = C·(1 − (1 + r)⁻ⁿ)/r + Face·(1 + r)⁻ⁿ",
+      where: [
+        ["C", "the coupon paid each period = coupon rate × face ÷ payments per year"],
+        ["r", "the market yield per period = required annual yield ÷ payments per year"],
+        ["n", "the number of coupon periods = years × payments per year"],
+        ["Face", "the amount repaid at maturity"],
+      ],
+      note: "When the market yield equals the coupon rate the price equals face (par). A higher required yield discounts the fixed coupons harder, so the price drops below face (a discount); a lower yield pushes it above (a premium).",
+    },
+    terms: [
+      ["Coupon rate", "The fixed annual interest a bond pays, as a percentage of face value."],
+      ["Required yield / YTM", "The market return used to discount the bond's cash flows."],
+      ["Current yield", "Annual coupon ÷ current price — the income return, ignoring any gain or loss to maturity."],
+      ["Par / premium / discount", "Priced at, above, or below face value."],
+    ],
+    faqs: [
+      ["Why does the price fall when yields rise?", "A bond's coupons are fixed. If newly issued bonds pay more, buyers will only take the old one at a lower price — so its yield rises to match the market. Prices and yields always move in opposite directions."],
+      ["Current yield vs yield to maturity?", "Current yield counts only the coupon against today's price. Yield to maturity also counts the pull toward par at maturity, so for a discount bond it is higher, and for a premium bond lower."],
+      ["Does this include accrued interest or tax?", "No — it is a clean price and ignores tax. Treat it as the theoretical value, not a live dealer quote."],
+    ],
+  },
+
+  tax_equiv_yield: {
+    method: {
+      lead: "A tax-free municipal bond and a taxable bond are only comparable after tax. This grosses the tax-free yield up to the taxable yield that would leave you the same amount once your marginal rate is taken out:",
+      expression: "Taxable-equivalent yield = Tax-free yield ÷ (1 − tax rate)",
+      where: [
+        ["Tax-free yield", "the muni's yield, which you keep in full"],
+        ["tax rate", "your marginal (top-bracket) rate, as a decimal"],
+      ],
+      note: "The higher your bracket, the more a tax-free yield is worth — which is why munis favour higher earners. Use your marginal rate (the rate on your next dollar), not your average rate.",
+    },
+    terms: [
+      ["Municipal bond", "Debt issued by a state or local government, often exempt from federal tax."],
+      ["Marginal tax rate", "The rate applied to your last dollar of income."],
+      ["Taxable-equivalent yield", "The pre-tax yield a taxable bond needs to match a tax-free one after tax."],
+    ],
+    faqs: [
+      ["Which tax rate do I use?", "Your marginal rate — the bracket your next dollar of interest would fall in — not your effective or average rate. Add state tax too if the muni is also state-exempt for you."],
+      ["So a 4% muni beats a 5% corporate?", "In a 24% bracket, 4% tax-free equals about 5.3% taxable, so yes — it would beat a 5% taxable bond after tax. Enter your own bracket to check."],
+      ["Are munis ever taxable?", "Some are (for example subject to AMT, or bought out of state), and a capital gain on any bond is taxable. This compares coupon yield only."],
+    ],
+  },
+
+  college_savings: {
+    method: {
+      lead: "It inflates today's annual cost forward to enrolment, multiplies by the years in school for the total bill, then grows your savings — current balance plus monthly deposits — to the same date and reports the gap:",
+      expression: "Future cost = Cost·(1 + i)^Y\nSavings  = Balance·(1 + r)ⁿ + PMT·((1 + r)ⁿ − 1)/r",
+      where: [
+        ["Cost, i, Y", "today's annual cost, annual college-cost inflation, years until enrolment"],
+        ["Balance, PMT", "current savings and the monthly deposit"],
+        ["r, n", "the monthly return and the number of months until enrolment"],
+      ],
+      note: "It compounds savings monthly up to enrolment but treats the whole bill as due then — it doesn't model the balance continuing to earn (or costs continuing to inflate) during the years in school, so read it as a planning estimate, not a drawdown schedule.",
+    },
+    terms: [
+      ["529 plan", "A tax-advantaged US education account; earnings grow tax-free when used for qualified expenses."],
+      ["College-cost inflation", "Tuition has historically risen faster than general inflation."],
+      ["Shortfall / surplus", "The gap between the projected bill and projected savings."],
+    ],
+    faqs: [
+      ["What inflation rate should I use?", "College costs have often risen a few points faster than general CPI. A higher assumption is the conservative choice — try a range."],
+      ["Does it assume savings keep growing during school?", "No — it compares the total cost at enrolment against savings at enrolment. In reality the unspent balance keeps earning, so a small projected shortfall may be manageable."],
+      ["Should I count financial aid or scholarships?", "It models the sticker cost. Aid, scholarships and tax credits reduce what you actually pay, so treat the result as a worst case."],
+    ],
+  },
+
+  investment_income: {
+    method: {
+      lead: "Straightforward yield arithmetic: it applies the annual yield to your principal for the yearly income, then splits that evenly across the payout periods:",
+      expression: "Annual income = Principal × Yield\nPer payment  = Annual income ÷ payouts per year",
+      where: [
+        ["Principal", "the amount invested"],
+        ["Yield", "the annual income rate — a bond coupon, dividend yield, or savings APY"],
+        ["payouts per year", "monthly = 12, quarterly = 4, and so on"],
+      ],
+      note: "This is simple income only: it assumes the yield is paid out rather than reinvested, and that principal and yield stay constant. It's a snapshot of income, not a growth projection.",
+    },
+    terms: [
+      ["Yield", "Annual income as a percentage of the amount invested."],
+      ["Principal", "The capital producing the income."],
+      ["Payout frequency", "How often income is paid — monthly, quarterly, semi-annually or annually."],
+    ],
+    faqs: [
+      ["Is this the same as total return?", "No — it's income only. Total return also includes any change in the investment's price, which can be positive or negative."],
+      ["Does it reinvest the income?", "No — it assumes you take the income as cash. To compound reinvested income, use the <a href=\"/calc/compound\">compound interest calculator</a>."],
+      ["Is the income taxable?", "Usually yes — interest and non-qualified dividends are generally taxed as income. This shows the pre-tax figure."],
+    ],
+  },
+
   /* ------------------------------------------------------ Loan & Mortgage */
   loan_refi: {
     method: {
@@ -162,6 +281,164 @@ export const EXPLAINERS = {
       ["Why does bi-weekly save so much?", "The extra 13th payment each year goes entirely to principal, shrinking the balance early — and on a long mortgage, early principal reductions save the most interest."],
       ["Is it the same as just paying extra?", "Effectively yes. Paying one extra monthly payment a year (split across 12 months, or as one lump) achieves nearly the same result. Bi-weekly just automates it."],
       ["Does my lender allow it?", "Many do, but some charge a fee to set up bi-weekly drafting, and a few apply the extra only at month-end. Confirm extra amounts are applied to principal immediately."],
+    ],
+  },
+
+  rent_vs_buy: {
+    method: {
+      lead: "It runs both paths over your comparison window and nets them out. Renting is simply the sum of rent, grown each year. Buying totals the mortgage payments plus the down payment, then subtracts the equity you'd hold at the end — the home's appreciated value minus the loan balance still owed:",
+      expression: "Net cost of buying = (Payments + Down payment) − (Future home value − Loan balance)",
+      where: [
+        ["Payments", "the mortgage payments made within the window (it stops billing once the loan is repaid)"],
+        ["Future home value", "Price·(1 + appreciation)^years"],
+        ["Loan balance", "the principal still owed at the end of the window"],
+      ],
+      note: "It's a cash-cost comparison. It doesn't model property tax, insurance, maintenance or transaction costs on the buy side, nor what a renter might earn by investing the down payment — all of which matter. Read the winner as directional.",
+    },
+    terms: [
+      ["Equity", "The share of the home you own outright — market value minus the loan balance."],
+      ["Appreciation", "The annual rate at which the home's value is assumed to rise."],
+      ["Amortization", "The split of each mortgage payment between interest and principal over the term."],
+    ],
+    faqs: [
+      ["Why can buying win even though I pay more in payments?", "Because you keep the house. The equity you hold at the end — appreciated value minus the remaining loan — is subtracted from the cost of buying. Renting builds no such asset."],
+      ["What's missing from the buy side?", "Property tax, insurance, maintenance and closing/selling costs, which this doesn't include. Add them and the breakeven shifts toward renting."],
+      ["Does it credit the renter for investing the down payment?", "No. A renter who invests the down payment and the monthly difference could do better than this simple comparison suggests — worth modelling separately."],
+    ],
+  },
+
+  mortgage_tax: {
+    method: {
+      lead: "It builds the loan's amortization schedule, adds up the interest paid in the loan year you pick, and multiplies that interest by your marginal tax rate — a deduction is worth your tax rate times the interest, not the interest itself:",
+      expression: "Tax saving = Interest paid that year × marginal tax rate",
+      where: [
+        ["Interest paid that year", "from the amortization schedule — high early, falling over time"],
+        ["marginal tax rate", "the bracket your top dollar of income falls in"],
+      ],
+      note: "The benefit only exists if you itemize and your total itemized deductions beat the standard deduction — for many filers they don't, so the real benefit is the extra above the standard deduction, or zero. It also assumes all the interest qualifies (the loan is within the deductible-balance limit).",
+    },
+    terms: [
+      ["Mortgage interest deduction", "A US itemized deduction for interest on a qualified home loan."],
+      ["Itemizing", "Claiming actual deductions instead of the flat standard deduction — worthwhile only when they add up to more."],
+      ["Marginal tax rate", "The rate on your last dollar of income — the rate a deduction actually saves you."],
+      ["Amortization", "Interest is front-loaded, so the deduction is largest in the early years."],
+    ],
+    faqs: [
+      ["Does everyone get this saving?", "No. Only if you itemize, and only to the extent your itemized deductions exceed the standard deduction. Many households take the standard deduction and get no marginal benefit."],
+      ["Why does the saving shrink each year?", "A mortgage is front-loaded with interest, so later years have less interest to deduct. Change the loan year to see this fall."],
+      ["Is there a limit?", "Yes — interest is deductible only on mortgage debt up to a cap set by law. This assumes your balance is within it; consult a tax professional for your situation."],
+    ],
+  },
+
+  discount_points: {
+    method: {
+      lead: "Each point costs 1% of the loan and buys a small rate cut. It prices the payment with and without the points, then divides what the points cost by the monthly payment they save to find how long you must keep the loan to break even:",
+      expression: "Breakeven months = Cost of points ÷ Monthly payment saved",
+      where: [
+        ["Cost of points", "loan amount × points × 1%"],
+        ["Monthly payment saved", "payment at the base rate − payment at the reduced rate"],
+      ],
+      note: "Points pay off only if you keep the mortgage past the breakeven point. Sell or refinance before then and you've spent more on points than you got back. The cost is also usually paid in cash at closing.",
+    },
+    terms: [
+      ["Discount point", "An upfront fee equal to 1% of the loan that lowers the interest rate."],
+      ["Breakeven point", "The month at which cumulative payment savings equal the points' cost."],
+      ["Buying down the rate", "Paying points to secure a lower rate for the life of the loan."],
+    ],
+    faqs: [
+      ["When are points worth it?", "When you'll hold the loan well beyond the breakeven month. The longer you keep the mortgage past that point, the more the points pay off."],
+      ["Are points tax-deductible?", "Points on a home purchase are often deductible as prepaid interest, though rules vary. This calculator ignores any tax effect."],
+      ["Is one point always the same rate cut?", "No — the reduction per point varies by lender and market. Enter the actual reduction your lender quotes."],
+    ],
+  },
+
+  arm: {
+    method: {
+      lead: "An ARM is fixed for an initial period, then resets. It computes the initial payment as if the starting rate ran the whole term, tracks the balance down to the reset date, then re-amortizes that remaining balance over the remaining months at the adjusted rate:",
+      expression: "Payment after reset = amortize(balance at reset, adjusted rate, remaining term)",
+      where: [
+        ["balance at reset", "the principal still owed when the fixed period ends"],
+        ["remaining term", "total term − initial fixed period"],
+      ],
+      note: "This models a single adjustment to a rate you specify. A real ARM can adjust repeatedly against an index plus margin, bounded by periodic and lifetime caps — so treat the \"after adjustment\" figure as one scenario, not a ceiling.",
+    },
+    terms: [
+      ["ARM", "Adjustable-rate mortgage — a fixed introductory rate that later floats."],
+      ["Initial fixed period", "The years the starting rate is locked (the \"5\" in a 5/1 ARM)."],
+      ["Rate reset / adjustment", "When and how the rate changes after the fixed period."],
+      ["Rate cap", "The limit on how much the rate can rise per adjustment and over the loan's life."],
+    ],
+    faqs: [
+      ["What do numbers like 5/1 mean?", "The first is the years the rate is fixed; the second is how often it adjusts afterward. A 5/1 ARM is fixed for five years, then adjusts yearly."],
+      ["Could my payment rise more than shown?", "Possibly. Real ARMs adjust against an index and can move each period up to a cap. This shows one adjustment to the rate you enter — check your loan's caps for the worst case."],
+      ["Why choose an ARM?", "The intro rate is usually lower than a comparable fixed rate — useful if you'll sell or refinance before it adjusts. The risk is being caught by higher rates if you don't."],
+    ],
+  },
+
+  fixed_vs_arm: {
+    method: {
+      lead: "It amortizes the fixed loan straight through, and builds the ARM in two phases — the intro rate for the fixed period, then the remaining balance re-amortized at the adjusted rate — and compares total interest across both:",
+      expression: "Difference = Total paid (fixed) − Total paid (ARM)",
+      where: [
+        ["Total paid (fixed)", "principal + all interest at the fixed rate over the term"],
+        ["Total paid (ARM)", "principal + intro-period interest + interest on the reset balance at the adjusted rate"],
+      ],
+      note: "It assumes exactly one adjustment, to the rate you enter, held for the rest of the term. If rates rise more (or less) than that single assumption, the comparison changes — the ARM's cost is only as good as your rate guess.",
+    },
+    terms: [
+      ["Fixed-rate mortgage", "One rate for the entire term; the payment never changes."],
+      ["ARM", "A lower intro rate that later adjusts, trading certainty for a cheaper start."],
+      ["Total interest", "The figure to compare — the true lifetime cost of each loan."],
+    ],
+    faqs: [
+      ["Which is cheaper?", "It depends entirely on the adjusted rate you assume. At the intro rate the ARM starts cheaper; if it resets much higher, the fixed loan can win over the full term."],
+      ["Is a positive difference good for the ARM?", "The result is fixed total minus ARM total, so a positive number means the ARM costs less under your assumptions. Change the adjusted rate to see how fragile that is."],
+      ["What's the safe choice?", "A fixed rate removes the rate risk entirely, at the cost of a higher starting rate. An ARM bets that you'll move or refinance early, or that rates stay tame."],
+    ],
+  },
+
+  interest_only: {
+    method: {
+      lead: "During the interest-only period you pay just the monthly interest, so the balance never falls. When that period ends, the full original balance must amortize over the years left — a payment jump the calculator makes explicit:",
+      expression: "IO payment    = Balance × rate ÷ 12\nLater payment = amortize(Balance, rate, remaining years)",
+      where: [
+        ["Balance", "the loan amount, unchanged through the interest-only period"],
+        ["remaining years", "total term − interest-only period"],
+      ],
+      note: "Because no principal is paid during the IO period, the later payment amortizes the whole balance over a shorter span — so it is markedly higher than a normal payment would have been. Paying only interest builds no equity.",
+    },
+    terms: [
+      ["Interest-only period", "An opening phase where payments cover interest only and the balance holds steady."],
+      ["Payment shock", "The jump when the IO period ends and principal repayment begins."],
+      ["Amortization", "Repaying principal and interest together in level installments."],
+    ],
+    faqs: [
+      ["Do I owe less after the interest-only period?", "No — the balance is unchanged, because you paid no principal. That's exactly why the payment jumps: the full amount now amortizes over fewer years."],
+      ["Why take an interest-only loan?", "Lower payments up front — useful for irregular income, or if you expect to sell or refinance before principal kicks in. The risks are the later payment shock and building no equity meanwhile."],
+      ["How big is the jump?", "Often substantial, because principal is squeezed into a shorter term. The \"payment increase\" figure shows exactly how much."],
+    ],
+  },
+
+  rental_property: {
+    method: {
+      lead: "It works up from rent to the three numbers investors watch. Effective rent nets out vacancy; net operating income subtracts operating expenses; cash flow then subtracts the mortgage. Cap rate and cash-on-cash express the return against price and against cash invested:",
+      expression: "NOI = (Rent·(1 − vacancy) − Expenses)·12\nCap rate = NOI ÷ Price      Cash-on-cash = Cash flow ÷ Down payment",
+      where: [
+        ["NOI", "net operating income — rental income after vacancy and operating costs, before the mortgage"],
+        ["Cash flow", "NOI − annual mortgage payments"],
+      ],
+      note: "NOI deliberately excludes the mortgage (so cap rate compares properties regardless of financing); cash flow and cash-on-cash include it. It doesn't model income tax, depreciation, capital expenses or appreciation — all central to a full return picture.",
+    },
+    terms: [
+      ["NOI (net operating income)", "Rental income minus operating expenses, before financing."],
+      ["Cap rate", "NOI ÷ price — the unlevered yield, used to compare properties."],
+      ["Cash-on-cash return", "Annual cash flow ÷ cash invested — the levered cash yield."],
+      ["Vacancy rate", "The share of the year the unit is assumed empty."],
+    ],
+    faqs: [
+      ["Cap rate vs cash-on-cash?", "Cap rate ignores the mortgage (NOI ÷ price), so it compares properties on their own merits. Cash-on-cash counts the mortgage and measures return on the actual cash you put in."],
+      ["What counts as operating expenses?", "Taxes, insurance, management, maintenance and any utilities you pay — but not the mortgage (that's financing) and not capital improvements. Underestimating these flatters the result."],
+      ["Does it include appreciation or tax?", "No — it's a cash-flow snapshot. Long-run returns also come from appreciation, principal paydown and tax effects like depreciation, none of which are modelled here."],
     ],
   },
 
@@ -234,6 +511,31 @@ export const EXPLAINERS = {
       ["When do RMDs start?", "Under current law (SECURE 2.0) they begin at age 73. Your first RMD can be delayed to April 1 of the following year, but then you take two that year."],
       ["Which accounts require RMDs?", "Traditional IRAs and most employer plans (401(k), 403(b)). Roth IRAs have no RMDs for the original owner, and Roth 401(k)s no longer require them either under recent rules."],
       ["What if I don't take it?", "The shortfall is penalized — 25% under SECURE 2.0, reduced to 10% if corrected promptly. Take at least the RMD each year to avoid it."],
+    ],
+  },
+
+  annuity: {
+    method: {
+      lead: "A fixed annuity is a level payment stream earning a constant rate. The calculator either grows your payments to a future value, or solves for the payment that reaches a target — both from the standard future-value-of-an-annuity relationship:",
+      expression: "FV = PMT · ((1 + r)ⁿ − 1) / r · (1 + r·type)",
+      where: [
+        ["PMT", "the periodic (monthly) payment"],
+        ["r", "the monthly rate = annual rate ÷ 12"],
+        ["n", "the number of payments = years × 12"],
+        ["type", "0 for ordinary (period-end), 1 for annuity due (period-start)"],
+      ],
+      note: "\"Annuity due\" payments arrive one period earlier, so each earns an extra period of interest — raising the future value, or lowering the payment needed to hit a target. Solving for the required payment simply inverts the same formula for PMT.",
+    },
+    terms: [
+      ["Annuity", "A series of equal payments made at regular intervals."],
+      ["Ordinary annuity", "Payments at the end of each period (most loans, many savings plans)."],
+      ["Annuity due", "Payments at the start of each period (rent, some insurance premiums)."],
+      ["Future value of an annuity", "What the whole payment stream grows to by the end."],
+    ],
+    faqs: [
+      ["Ordinary annuity vs annuity due?", "Timing. Due payments happen at the start of each period and so earn one more period of growth; ordinary payments happen at the end. For the same payment, an annuity due always yields a slightly higher future value."],
+      ["Is this the same as an insurance annuity product?", "No. This is the time-value math of a level payment stream. A commercial annuity contract layers on fees, options and guarantees that this doesn't model."],
+      ["How is the required payment found?", "By inverting the future-value formula for PMT — the deposit that, compounded at your rate for the term, lands exactly on the target."],
     ],
   },
 
