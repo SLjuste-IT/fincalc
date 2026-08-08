@@ -238,6 +238,54 @@ export const EXPLAINERS = {
     ],
   },
 
+  irr_npv: {
+    method: {
+      lead: "It reads your cash flows in order (Year 0 first, usually the negative outlay) and discounts each back to today. NPV sums those present values at the rate you choose; IRR is the rate that makes that sum exactly zero:",
+      expression: "NPV = Σ CFₜ / (1 + r)ᵗ   (t = 0…n)\nIRR is the rate r that makes NPV = 0",
+      where: [
+        ["CFₜ", "the cash flow in period t — Year 0 first, and typically negative"],
+        ["r", "the discount rate per period"],
+        ["IRR", "the rate at which the project's NPV is exactly zero"],
+      ],
+      note: "A positive NPV means the cash flows are worth more than the discount rate demands — the project adds value at that rate. IRR says the same thing as a single break-even rate, found numerically. The two can disagree when ranking projects, and IRR misbehaves when the cash flows change sign more than once.",
+    },
+    terms: [
+      ["Net present value (NPV)", "The sum of future cash flows discounted to today, net of the initial outlay."],
+      ["Internal rate of return (IRR)", "The discount rate that makes NPV zero — the project's implied annual return."],
+      ["Discount rate", "The required return (or cost of capital) used to value future cash."],
+      ["Cash flow", "Money in (positive) or out (negative) in a given period."],
+    ],
+    faqs: [
+      ["How do I enter the cash flows?", "In order, Year 0 first, comma-separated. Year 0 is usually the initial cost as a negative number; later inflows are positive — e.g. −10000, 3000, 4000, 4000, 5000."],
+      ["NPV or IRR — which should I trust?", "NPV, generally. It's stated in money at your actual required return and adds up across projects. IRR is a convenient single rate but can mislead when projects differ in size or timing."],
+      ["Why might IRR show N/A?", "If the cash flows never cross zero (all one sign), or switch sign several times, there may be no single IRR — a known limitation of the measure."],
+    ],
+  },
+
+  hsa: {
+    method: {
+      lead: "It values an HSA's twin benefits separately. The tax saving is your contribution times your marginal rate — the money you don't hand over in tax. The balance is the future value of each year's total contribution, yours plus the employer's, compounded at your return:",
+      expression: "Annual tax saving = Your contribution × tax rate\nBalance = Total annual · ((1 + r)^years − 1) / r",
+      where: [
+        ["Total annual", "your contribution + the employer's contribution"],
+        ["r", "the expected annual return"],
+        ["years", "the number of years you contribute"],
+      ],
+      note: "An HSA is triple tax-advantaged — contributions are pre-tax, growth is untaxed, and withdrawals for qualified medical expenses are tax-free. This models a level annual contribution; it doesn't add a starting balance or enforce the annual IRS contribution limit.",
+    },
+    terms: [
+      ["HSA (Health Savings Account)", "A tax-advantaged account for medical costs, paired with a qualifying high-deductible health plan."],
+      ["Triple tax advantage", "Pre-tax contributions, tax-free growth, and tax-free qualified withdrawals."],
+      ["Marginal tax rate", "The rate your contribution saves you up front."],
+      ["Qualified medical expense", "A cost the IRS lets you pay from an HSA tax-free."],
+    ],
+    faqs: [
+      ["Why is an HSA called triple-tax-advantaged?", "Three breaks in one account: you contribute pre-tax, the balance grows untaxed, and withdrawals for qualified medical costs are tax-free — a combination no other account offers."],
+      ["Can I invest the balance?", "Many HSAs let you invest above a cash threshold, which is what makes the long-run growth here realistic. Unused funds roll over every year, unlike an FSA."],
+      ["What if I use it for non-medical costs?", "Before 65, non-qualified withdrawals are taxed and penalized; after 65 they're taxed like an IRA. This projection assumes qualified use."],
+    ],
+  },
+
   /* ------------------------------------------------------ Loan & Mortgage */
   loan_refi: {
     method: {
@@ -442,6 +490,50 @@ export const EXPLAINERS = {
     ],
   },
 
+  loan_compare: {
+    method: {
+      lead: "It fully amortizes each loan and compares their total cost — every scheduled payment over the whole term — so a lower monthly payment can't hide a higher lifetime bill:",
+      expression: "Difference = Total paid (A) − Total paid (B)\nTotal paid = monthly payment × number of months",
+      where: [
+        ["Each payment", "from M = P·r(1 + r)ⁿ / ((1 + r)ⁿ − 1)"],
+        ["Total paid", "the payment times the number of months in that loan's term"],
+      ],
+      note: "The comparison is on total dollars paid, interest included. Two loans can have similar payments but very different total costs when their terms differ — a longer term lowers the payment while raising lifetime interest.",
+    },
+    terms: [
+      ["Amortization", "Repaying a loan in level installments split between interest and principal."],
+      ["Total cost", "Principal plus all interest over the full term — the true basis for comparison."],
+      ["Term", "The number of years over which the loan is repaid."],
+    ],
+    faqs: [
+      ["Should I just pick the lower monthly payment?", "Not necessarily. A lower payment often comes from a longer term, which can cost more in total interest. Compare the total-cost figure, not just the monthly one."],
+      ["Does it account for fees or APR?", "No — it compares rate, amount and term. To fold fees and points into a single rate, use the <a href=\"/calc/apr\">APR calculator</a>."],
+      ["The two loan amounts differ — is the comparison still fair?", "It compares total dollars paid, so different amounts are handled; but a like-for-like rate comparison is clearest when the amounts match."],
+    ],
+  },
+
+  commercial_loan: {
+    method: {
+      lead: "A commercial loan often amortizes on a long schedule but comes due early with a lump-sum balloon. It sizes the monthly payment from the full amortization period, then reads off the balance still owed at the balloon date:",
+      expression: "Payment = amortize(amount, rate, amortization years)\nBalloon due = balance remaining at the balloon year",
+      where: [
+        ["Amortization years", "the (longer) schedule the payment is based on, e.g. 25"],
+        ["Balloon year", "when the remaining balance falls due in one payment, e.g. 5"],
+      ],
+      note: "Because the payment is stretched over a long amortization but the loan matures early, only a fraction of the principal is repaid before the balloon — so the balloon can be a large share of the original loan, usually refinanced or paid from a sale.",
+    },
+    terms: [
+      ["Balloon payment", "A large lump sum of remaining principal due at the end of the loan's term."],
+      ["Amortization period", "The longer schedule used to size the monthly payment."],
+      ["Loan term / balloon year", "When the balance actually comes due."],
+    ],
+    faqs: [
+      ["Why is the balloon so large?", "Because the payment is based on a long amortization (say 25 years) while the loan matures early (say 5). Little principal is repaid in between, so most of the balance remains — that's the balloon."],
+      ["How is a balloon repaid?", "Usually by refinancing into a new loan, or from the sale of the property. It relies on credit or asset value being available at maturity, which is the main risk."],
+      ["Is this how home mortgages work?", "No — standard residential mortgages fully amortize over their term with no balloon. Balloons are common in commercial and some short-term financing."],
+    ],
+  },
+
   /* ---------------------------------------------------------- Credit Card */
   cc_minimum: {
     method: {
@@ -536,6 +628,121 @@ export const EXPLAINERS = {
       ["Ordinary annuity vs annuity due?", "Timing. Due payments happen at the start of each period and so earn one more period of growth; ordinary payments happen at the end. For the same payment, an annuity due always yields a slightly higher future value."],
       ["Is this the same as an insurance annuity product?", "No. This is the time-value math of a level payment stream. A commercial annuity contract layers on fees, options and guarantees that this doesn't model."],
       ["How is the required payment found?", "By inverting the future-value formula for PMT — the deposit that, compounded at your rate for the term, lands exactly on the target."],
+    ],
+  },
+
+  retirement_planner: {
+    method: {
+      lead: "It grows your savings to retirement, then works out the lump sum those retirement years require. The nest egg is your balance plus contributions compounded; the need is the present value, at retirement, of your desired income across your retirement years:",
+      expression: "Nest egg = Savings·(1 + r)ⁿ + PMT·((1 + r)ⁿ − 1)/r\nNeed = Income · (1 − (1 + R)⁻ʸ) / R",
+      where: [
+        ["r, n, PMT", "the monthly return, months until retirement, and monthly contribution"],
+        ["R, y, Income", "the annual return, the number of years in retirement, and desired annual income"],
+      ],
+      note: "The \"need\" treats the balance as still earning your return through retirement (a present-value annuity), not sitting in cash. It doesn't inflate the desired income, so for a distant retirement set the income target in future dollars — or read the surplus as a rough cushion.",
+    },
+    terms: [
+      ["Nest egg", "The total savings you're projected to have at retirement."],
+      ["Present value of an annuity", "The lump sum today that funds a stream of future withdrawals at a given return."],
+      ["Surplus / shortfall", "Nest egg minus the lump sum your retirement income requires."],
+    ],
+    faqs: [
+      ["Does it account for inflation?", "Not directly — it works in the dollars you enter. For a retirement decades away, set the desired income in future dollars, or use a real (after-inflation) return."],
+      ["What return should I assume in retirement?", "The \"need\" figure assumes the balance keeps earning your rate while you draw it down. A more cautious plan uses a lower retirement-phase return, which raises the amount needed."],
+      ["Is a small surplus enough?", "Treat it as a cushion, not a guarantee. Market sequence, longevity and inflation all add uncertainty, so a comfortable margin is wise."],
+    ],
+  },
+
+  "401k_max": {
+    method: {
+      lead: "To \"max out\" is to hit the annual IRS elective-deferral limit. It converts that limit into the contribution percentage and the per-paycheck amount you'd need, and shows how far your current rate falls short:",
+      expression: "% needed = IRS limit ÷ salary\nPer paycheck = IRS limit ÷ pay periods",
+      where: [
+        ["IRS limit", "the annual elective-deferral cap you enter"],
+        ["pay periods", "how many paychecks a year (bi-weekly = 26, and so on)"],
+      ],
+      note: "The limit is on your own elective deferrals; the employer match doesn't count toward it. Spreading contributions evenly avoids hitting the cap early and missing match on later paychecks — some plans \"true up\", many don't.",
+    },
+    terms: [
+      ["Elective deferral limit", "The IRS cap on what you can contribute to a 401(k) from salary each year."],
+      ["Maxing out", "Contributing the full annual limit."],
+      ["True-up", "An employer provision that pays any match missed by hitting the cap early — not universal."],
+    ],
+    faqs: [
+      ["Does the employer match count toward the limit?", "No — the elective-deferral limit is on your own contributions. Employer match sits under a separate, higher overall limit."],
+      ["Why spread contributions across the year?", "If you hit the cap early, contributions stop — and on many plans so does the per-paycheck match on the remaining checks. Even pacing protects the full match unless your plan trues up."],
+      ["What is the current limit?", "It's set by the IRS and rises most years, with an extra catch-up amount at 50+. Enter the current year's figure; this calculator doesn't hard-code it."],
+    ],
+  },
+
+  ss_estimator: {
+    method: {
+      lead: "Social Security replaces a progressively smaller share of higher earnings. It runs your average indexed monthly earnings through the benefit \"bend points\" to get your full-retirement-age benefit (PIA), then adjusts for when you claim:",
+      expression: "PIA = 90%·(first $1,174) + 32%·(next tier to $7,078) + 15%·(rest)",
+      where: [
+        ["AIME", "your average indexed monthly earnings"],
+        ["bend points", "the 2024 thresholds ($1,174 and $7,078) where the replacement rate steps down"],
+        ["claim adjustment", "62 ≈ 70% of PIA, 67 (FRA) = 100%, 70 ≈ 124%"],
+      ],
+      note: "A simplified estimate using one year's bend points and three claiming ages; your real benefit depends on your full 35-year indexed earnings history and your exact full-retirement age. Treat it as a ballpark, not your official figure.",
+    },
+    terms: [
+      ["AIME", "Average indexed monthly earnings — your career earnings, inflation-adjusted and averaged."],
+      ["PIA (Primary Insurance Amount)", "The monthly benefit at full retirement age."],
+      ["Bend points", "The income thresholds where the replacement rate drops (90% → 32% → 15%)."],
+      ["Full retirement age (FRA)", "The age (66–67 for most) at which you receive 100% of your PIA."],
+    ],
+    faqs: [
+      ["Why do the percentages fall as earnings rise?", "By design — Social Security replaces more of a low earner's income than a high earner's. The 90/32/15% bend points make it progressive."],
+      ["How much does claiming age matter?", "A lot. Claiming at 62 permanently cuts the benefit to about 70% of PIA; waiting to 70 raises it to about 124%. The trade-off is fewer years of a larger check."],
+      ["Is this my official benefit?", "No — it's a simplified estimate. Your real figure comes from your Social Security statement, based on your complete earnings record."],
+    ],
+  },
+
+  asset_allocation: {
+    method: {
+      lead: "It starts from a common rule of thumb — hold roughly (110 − your age)% in stocks — then tilts the mix for your risk tolerance and fills the rest with bonds and a slice of cash:",
+      expression: "Stocks % = clamp(110 − age ± risk adjustment, 10, 95)",
+      where: [
+        ["110 − age", "the baseline stock share, which falls as you age"],
+        ["risk adjustment", "−15 for conservative, +15 for aggressive"],
+        ["remainder", "split across bonds and cash"],
+      ],
+      note: "This is a starting template, not advice. The old \"100 − age\" rule has drifted higher (110, even 120) as lifespans lengthen. Your own horizon, other income and comfort with volatility should shape the final mix.",
+    },
+    terms: [
+      ["Asset allocation", "How a portfolio is divided among stocks, bonds and cash."],
+      ["Risk tolerance", "Your capacity and willingness to endure ups and downs for higher expected return."],
+      ["Rebalancing", "Periodically returning to your target mix as markets move it."],
+      ["Glide path", "The way a target allocation shifts toward bonds as you approach a goal."],
+    ],
+    faqs: [
+      ["Where does 110 − age come from?", "It's a rule of thumb: younger investors, with time to recover, hold more stocks; the share falls with age. Older \"100 − age\" versions have been nudged up as retirements lengthen."],
+      ["Should I follow this exactly?", "Treat it as a starting point. Your time horizon, job stability, pensions and stomach for volatility all justify moving away from a generic template."],
+      ["How often should I rebalance?", "Commonly once or twice a year, or when a holding drifts a set amount from target. Rebalancing sells what's risen and buys what's lagged, keeping risk in check."],
+    ],
+  },
+
+  retirement_calc: {
+    method: {
+      lead: "An all-in-one readiness check. It grows your savings to retirement, then computes the level monthly income that would draw that balance down to zero over your retirement years, assuming it keeps earning a fixed 4% while you spend it:",
+      expression: "Sustainable monthly = the payment that amortizes the nest egg over the retirement months at 4%/yr",
+      where: [
+        ["Nest egg", "savings compounded at your pre-retirement return, plus contributions"],
+        ["retirement months", "(life expectancy − retirement age) × 12"],
+      ],
+      note: "The drawdown uses a fixed 4% annual return through retirement — a planning assumption, not a promise. It fully depletes the balance by your life-expectancy age, so living longer than expected would exhaust it; build in a margin.",
+    },
+    terms: [
+      ["Nest egg", "Projected savings at the moment you retire."],
+      ["Sustainable income", "The level withdrawal that empties the balance over your planning horizon."],
+      ["Drawdown", "Spending down accumulated savings during retirement."],
+      ["Life expectancy", "The age to which the plan funds income — outliving it is the risk."],
+    ],
+    faqs: [
+      ["Why 4% in retirement?", "It's a common, cautious planning return for a balanced retirement portfolio — an assumption you can't control precisely. A lower rate produces a safer, smaller sustainable income."],
+      ["Does it leave anything behind?", "No — it draws the balance to zero at your life-expectancy age. To leave an estate, or guard against a long life, target income below the sustainable figure."],
+      ["How is this different from the Retirement Planner?", "Similar inputs, different output: the planner compares your nest egg to a lump-sum need; this one turns the nest egg into a monthly income figure."],
     ],
   },
 
@@ -674,6 +881,29 @@ export const EXPLAINERS = {
     ],
   },
 
+  paycheck_tax: {
+    method: {
+      lead: "It works from gross pay down to take-home. The standard deduction comes off first, federal tax is applied through the 2024 brackets, then FICA (Social Security + Medicare) and an optional flat state rate are subtracted, and the remainder is split across your pay periods:",
+      expression: "Net = Gross − Federal tax − Social Security − Medicare − State tax\nSocial Security = min(Gross, $168,600) × 6.2%      Medicare = Gross × 1.45%",
+      where: [
+        ["Federal tax", "the 2024 brackets applied to (gross − standard deduction)"],
+        ["Social Security", "6.2% up to the annual wage base; Medicare is 1.45% on all wages"],
+      ],
+      note: "A simplified 2024-law estimate. It uses the standard deduction and ignores pre-tax deductions (401k, health premiums), tax credits, the extra Medicare tax on high earners, and local taxes — so real take-home can differ. State tax is a flat estimate, not bracketed.",
+    },
+    terms: [
+      ["Gross vs net pay", "Earnings before deductions vs the amount that reaches your account."],
+      ["FICA", "The combined Social Security (6.2%) and Medicare (1.45%) payroll taxes."],
+      ["Standard deduction", "A flat amount subtracted from income before federal tax."],
+      ["Wage base", "The earnings ceiling above which Social Security tax stops (Medicare has none)."],
+    ],
+    faqs: [
+      ["Why doesn't Social Security apply to my whole salary?", "It's capped at an annual wage base ($168,600 in 2024); earnings above it aren't taxed for Social Security. Medicare's 1.45% has no such cap."],
+      ["Why is my real paycheck different?", "This ignores pre-tax deductions (retirement, health insurance), tax credits and local taxes, and treats state tax as a flat rate. Those can move take-home either way."],
+      ["Is the state tax accurate?", "It's a flat estimate you enter. Many states use brackets, and some have no income tax at all, so treat it as an approximation."],
+    ],
+  },
+
   /* -------------------------------------------------------------------- Stock */
   capm: {
     method: {
@@ -744,6 +974,53 @@ export const EXPLAINERS = {
       ["Does HPR include dividends?", "Yes — that's the point. Including income (dividends or interest) makes it a total-return figure, not just price appreciation."],
       ["How do I annualize it?", "Convert to a compound annual rate: (1 + HPR)^(1 ÷ years) − 1. A 21% return over three years is about 6.6% a year, not 7%."],
       ["Can it be negative?", "Yes — if the ending value plus income is less than what you started with, the holding period return is negative."],
+    ],
+  },
+
+  stock_return: {
+    method: {
+      lead: "It totals what you got back against what you put in. Cost basis is the purchase price plus fees; total return adds the capital gain and any dividends; the annualized figure converts that to a compound yearly rate:",
+      expression: "Total return = (Sale − Cost basis) + Dividends\nAnnualized = ((Proceeds + Dividends) / Cost basis)^(1/years) − 1",
+      where: [
+        ["Cost basis", "purchase price × shares + fees"],
+        ["Proceeds", "sale price × shares"],
+      ],
+      note: "Total return counts both price gain and income, which is the honest measure. The annualized (compound) rate lets you compare holdings of different lengths — a 30% gain over three years is about 9% a year, not 10%.",
+    },
+    terms: [
+      ["Cost basis", "Total amount invested, including commissions — the base for gain and tax."],
+      ["Capital gain", "Sale proceeds minus cost basis, before dividends."],
+      ["Total return", "Capital gain plus dividends — the complete result."],
+      ["Annualized return", "The equivalent steady yearly compound rate."],
+    ],
+    faqs: [
+      ["Why include dividends?", "Because they're part of what you earned. Leaving them out understates the return, especially for income stocks held a long time."],
+      ["Total return or annualized — which matters?", "Total return is the raw dollars and percent. Annualized restates it per year, so you can compare investments held for different lengths of time."],
+      ["Does it handle taxes?", "No — it's a pre-tax result. Capital gains and dividends are usually taxable, at a rate that depends on your bracket and how long you held."],
+    ],
+  },
+
+  stock_constant_growth: {
+    method: {
+      lead: "This is the Gordon Growth (dividend discount) model: a stock whose dividend grows at a steady rate forever is worth next year's dividend divided by the gap between your required return and that growth rate:",
+      expression: "Value = D₁ / (r − g)     where D₁ = D₀·(1 + g)",
+      where: [
+        ["D₀ / D₁", "this year's and next year's annual dividend"],
+        ["g", "the constant dividend growth rate"],
+        ["r", "your required rate of return"],
+      ],
+      note: "The model only works when r > g — otherwise the value is infinite or negative, which is why the calculator requires it. It's exquisitely sensitive near r ≈ g: a small change in either assumption swings the value hugely, so treat the output as a scenario, not a price.",
+    },
+    terms: [
+      ["Dividend discount model", "Valuing a stock as the present value of its future dividends."],
+      ["Gordon Growth Model", "The constant-growth version — value = D₁ ÷ (r − g)."],
+      ["Required return (r)", "The annual return you demand to hold the stock."],
+      ["Constant growth (g)", "The assumed perpetual dividend growth rate."],
+    ],
+    faqs: [
+      ["Why must the required return exceed the growth rate?", "If dividends grew as fast as (or faster than) your discount rate forever, their present value wouldn't converge — the formula would return an infinite or negative value. Perpetual growth above the discount rate isn't realistic."],
+      ["Why is the value so sensitive to the inputs?", "Because it divides by the small gap (r − g). When r and g are close, tiny changes in either produce large swings in value — a key caution with this model."],
+      ["What stocks does it suit?", "Mature, steady dividend payers whose growth is plausibly stable. It fits fast-growing or non-dividend stocks poorly; a two-stage model (the <a href=\"/calc/stock_nonconstant_growth\">non-constant growth calculator</a>) handles a high-growth phase."],
     ],
   },
 };
