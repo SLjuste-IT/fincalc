@@ -78,6 +78,10 @@ const schemas = [siteSchema, orgSchema, ...jsonLd];
       crossorigin="anonymous"
       is:inline
     ></script>
+    {/* Google Search Console — site ownership verification (HTML tag method).
+        Rendered in every page's <head>; the homepage copy is what Search Console
+        reads. Kept permanently so re-verification never breaks. */}
+    <meta name="google-site-verification" content="CHS91RHTeftYJxpWP7RX9IvkI5PfO1N7kFWYLMsx_IA" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
