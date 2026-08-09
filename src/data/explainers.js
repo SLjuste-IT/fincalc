@@ -286,6 +286,50 @@ export const EXPLAINERS = {
     ],
   },
 
+  currency: {
+    method: {
+      lead: "It converts through a common base: your amount is divided by the source currency's reference rate to a base value, then multiplied by the target currency's rate. The quoted exchange rate is simply the ratio of the two:",
+      expression: "Converted = Amount × (rate_to ÷ rate_from)",
+      where: [
+        ["rate_from / rate_to", "each currency's reference rate against the common base"],
+      ],
+      note: "These are reference (mid-market) rates refreshed daily — not the price you'll actually transact at. Banks and card networks add a spread and sometimes a fee, so the real cost of exchanging money is usually a percent or two worse than the mid-market figure shown.",
+    },
+    terms: [
+      ["Exchange rate", "How much of one currency you get for one unit of another."],
+      ["Mid-market rate", "The midpoint between the buy and sell price — the \"true\" rate before any margin."],
+      ["Spread", "The gap a provider adds around the mid-market rate as its margin."],
+    ],
+    faqs: [
+      ["Why isn't this the rate my bank gives me?", "These are mid-market reference rates. Banks, exchanges and cards add a spread (and sometimes a flat fee), so you'll typically get a slightly worse rate in practice."],
+      ["How current are the rates?", "They're refreshed daily. Currencies move continuously, so for anything time-sensitive check a live quote before acting."],
+      ["Which currency is the base?", "It converts through a common reference internally, so any listed currency can be the \"from\" or \"to\" — the result is the same either way."],
+    ],
+  },
+
+  tbill: {
+    method: {
+      lead: "A Treasury bill pays no coupon — you buy it below face value and receive face at maturity. The calculator expresses that gain two standard ways: the discount yield (against face value, on a 360-day basis) and the investment/bond-equivalent yield (against your actual price, on a 365-day basis):",
+      expression: "Discount yield = (Face − Price)/Face × 360/days\nBond-equivalent yield = (Face − Price)/Price × 365/days",
+      where: [
+        ["Face − Price", "the discount, which is your entire return"],
+        ["days", "days to maturity"],
+      ],
+      note: "The two conventions exist for good reasons but aren't directly comparable to a normal bond yield. The bond-equivalent (investment) yield — measured against the price you actually pay and a 365-day year — is the fairer number for comparing a T-bill to other investments.",
+    },
+    terms: [
+      ["Treasury bill (T-bill)", "A short-term (≤1 year) US government debt security sold at a discount."],
+      ["Discount yield", "Return stated against face value on a 360-day year — the quoting convention."],
+      ["Bond-equivalent yield", "Return against the purchase price on a 365-day year — better for comparison."],
+      ["Discount", "Face value minus purchase price; the T-bill's entire return."],
+    ],
+    faqs: [
+      ["Why are there two yields?", "Convention. The discount yield (360-day, vs face) is how bills are quoted; the bond-equivalent yield (365-day, vs price) restates it so you can compare to coupon bonds and other investments."],
+      ["Which yield should I compare?", "The bond-equivalent (investment) yield. It's measured against what you actually paid, so it reflects your real return more honestly than the discount yield."],
+      ["Is T-bill interest taxable?", "It's subject to federal income tax but exempt from state and local tax — a modest advantage for investors in high-tax states."],
+    ],
+  },
+
   /* ------------------------------------------------------ Loan & Mortgage */
   loan_refi: {
     method: {
@@ -534,6 +578,74 @@ export const EXPLAINERS = {
     ],
   },
 
+  apr_advanced: {
+    method: {
+      lead: "APR restates a loan's true cost as a single rate by treating the fees as money you never received. It keeps the payment set by your stated rate, subtracts every fee and point from the amount you actually get, and solves for the rate that links the two:",
+      expression: "APR = the rate where Payment = amortize(net amount, APR, term)\nNet amount = Loan − origination − other fees − points cost",
+      where: [
+        ["Payment", "computed from the stated rate on the full loan"],
+        ["Net amount", "the loan minus all fees and points — what actually reaches you"],
+      ],
+      note: "Because the payment is fixed but the amount financed is effectively smaller, the APR comes out above the stated rate — the more you pay in fees and points, the wider that gap. This advanced version itemizes origination, other closing fees and discount points separately.",
+    },
+    terms: [
+      ["APR (annual percentage rate)", "A loan's cost as a rate, including fees — the legally comparable figure."],
+      ["Stated (note) rate", "The headline interest rate before fees."],
+      ["Discount points", "An upfront fee (1% of the loan each) that buys a lower rate."],
+      ["Origination fee", "The lender's charge for processing the loan."],
+    ],
+    faqs: [
+      ["Why is the APR higher than the stated rate?", "Because fees and points are money you pay but don't get to borrow. Spread over the loan, they raise the effective rate above the note rate."],
+      ["Is APR the best way to compare loans?", "It's the standard, and better than comparing rates alone. But it assumes you keep the loan its full term — if you'll repay or refinance early, upfront fees weigh more heavily than APR suggests."],
+      ["Do points and fees count the same?", "In APR, yes — both are upfront costs subtracted from what you receive. This calculator lets you enter points and fee items separately for clarity."],
+    ],
+  },
+
+  loan_analysis: {
+    method: {
+      lead: "It amortizes the loan twice — once as scheduled, once with your extra monthly payment applied straight to principal — and reports the interest and time the extra payments save:",
+      expression: "Interest saved = Interest (scheduled) − Interest (with extra)\nMonths saved = Payoff months (scheduled) − Payoff months (with extra)",
+      where: [
+        ["Extra", "an additional amount added to every monthly payment, all applied to principal"],
+      ],
+      note: "Every extra dollar cuts the balance that future interest is charged on, so the savings compound — a modest extra payment can shorten a long loan by years. The gain is largest early in the loan, when interest makes up most of the payment.",
+    },
+    terms: [
+      ["Principal prepayment", "An extra payment applied directly to the balance, not interest."],
+      ["Amortization", "The scheduled split of each payment between interest and principal."],
+      ["Payoff time", "How long until the balance reaches zero."],
+    ],
+    faqs: [
+      ["Why does a small extra payment save so much?", "Because it goes entirely to principal, and every dollar of principal removed saves all the future interest it would have generated. Over a long term those savings compound."],
+      ["When do extra payments help most?", "Early in the loan, when the balance — and therefore the interest portion of each payment — is highest. The same extra payment later saves less."],
+      ["Should I always prepay?", "Not necessarily. Compare the loan's rate to what the money could earn elsewhere, and check for prepayment penalties. High-rate debt is usually worth prepaying; low-rate debt may not be."],
+    ],
+  },
+
+  auto_lease: {
+    method: {
+      lead: "A lease payment has two parts: depreciation (the value the car loses while you drive it) and a rent charge (the financing cost). It spreads depreciation over the term and applies the money factor to the sum of the cap cost and residual, then adds sales tax:",
+      expression: "Depreciation = (Adjusted cap cost − Residual) ÷ months\nRent charge = (Adjusted cap cost + Residual) × money factor\nPayment = (Depreciation + Rent charge) × (1 + tax)",
+      where: [
+        ["Adjusted cap cost", "negotiated price minus any down payment (cap reduction)"],
+        ["Residual", "the car's forecast value at lease end = price × residual %"],
+        ["money factor", "the lease's interest rate in disguise — multiply by 2,400 for the approximate APR"],
+      ],
+      note: "The money factor is a small decimal (e.g. 0.00125); × 2,400 gives the equivalent APR. A higher residual lowers depreciation and your payment — you're financing less of the car's value over the term.",
+    },
+    terms: [
+      ["Capitalized cost", "The agreed price of the vehicle being leased (negotiable)."],
+      ["Residual value", "The car's predicted worth at lease end; you pay for the drop from cap cost to residual."],
+      ["Money factor", "The lease's financing rate; multiply by 2,400 for the approximate APR."],
+      ["Depreciation", "The portion of the payment covering the car's loss in value."],
+    ],
+    faqs: [
+      ["What is the money factor?", "It's the lease equivalent of an interest rate, written as a small decimal. Multiply by 2,400 to convert it to an approximate APR — the calculator shows this."],
+      ["Why does a higher residual mean a lower payment?", "Because you only pay for the depreciation — the gap between cap cost and residual. A higher residual means a smaller gap, so a smaller payment."],
+      ["Is a down payment on a lease worth it?", "It lowers the payment (by reducing the adjusted cap cost) but is generally at risk if the car is totaled early. Many advise minimizing lease down payments for that reason."],
+    ],
+  },
+
   /* ---------------------------------------------------------- Credit Card */
   cc_minimum: {
     method: {
@@ -746,6 +858,118 @@ export const EXPLAINERS = {
     ],
   },
 
+  retirement_savings_analysis: {
+    method: {
+      lead: "It grows your savings to retirement, then converts that nest egg into the level annual income it can sustain across your withdrawal years — the payment that draws the balance to zero while it keeps earning your retirement-phase return — and compares it to your goal:",
+      expression: "Nest egg = Savings·(1 + r)ⁿ + PMT·((1 + r)ⁿ − 1)/r\nSustainable income = Nest egg · wr / (1 − (1 + wr)⁻ʸ)",
+      where: [
+        ["r, n, PMT", "the monthly return, months to retirement, and monthly saving"],
+        ["wr, y", "the retirement-phase annual return and the number of withdrawal years"],
+      ],
+      note: "It uses two different returns — one while saving, a usually lower one while drawing down. The sustainable income empties the balance exactly over your withdrawal years, so outliving that horizon is the risk; a lower withdrawal return gives a safer, smaller figure.",
+    },
+    terms: [
+      ["Accumulation vs decumulation", "The saving phase vs the spending-down phase of retirement."],
+      ["Sustainable income", "The annual withdrawal that exhausts the balance over the planned years."],
+      ["Nest egg", "Projected savings at the moment you retire."],
+    ],
+    faqs: [
+      ["Why two different return rates?", "Portfolios are usually shifted toward safer, lower-returning assets in retirement, so the withdrawal-phase return is typically lower than the accumulation return. Using one rate for both would overstate income."],
+      ["Does it leave a cushion?", "No — it draws the balance to zero over your withdrawal years. To guard against a long life or bad markets, target income below the sustainable figure."],
+      ["What if I fall short?", "Save more monthly, retire later, or trim the income goal. Small increases early compound most; the shortfall note flags when your rate won't meet the target."],
+    ],
+  },
+
+  retirement_income_analysis: {
+    method: {
+      lead: "It runs your nest egg forward year by year: each year the balance earns your return, then a withdrawal is taken out, and the withdrawal itself grows with inflation. The calculator reports whether the money survives the period, or the year it runs dry:",
+      expression: "Each year:  Balance = Balance·(1 + return) − Withdrawal\n            Withdrawal = Withdrawal·(1 + inflation)",
+      where: [
+        ["Withdrawal", "starts at nest egg × withdrawal rate, then rises with inflation each year"],
+        ["return, inflation", "the annual investment return and the rate the withdrawal grows"],
+      ],
+      note: "Because the withdrawal is inflation-adjusted, it rises every year while the balance may not keep up — the classic sequence-of-returns risk. This is a fixed-return simulation; real markets vary year to year, and a bad early stretch is far more damaging than a bad late one.",
+    },
+    terms: [
+      ["Withdrawal rate", "The first year's withdrawal as a percentage of the starting nest egg (the \"4% rule\" idea)."],
+      ["Sequence-of-returns risk", "The danger that poor returns early in retirement deplete a portfolio faster."],
+      ["Real (inflation-adjusted) withdrawal", "Spending that rises each year to preserve purchasing power."],
+    ],
+    faqs: [
+      ["What's a safe withdrawal rate?", "A common rule of thumb is around 4% of the starting balance, rising with inflation — but it's a guideline, not a guarantee, and depends on returns, horizon and how much variability you can tolerate."],
+      ["Why does inflation matter so much?", "Because the withdrawal grows every year. Over a long retirement, an inflation-adjusted income can far exceed the starting figure, draining the balance faster than a flat withdrawal would."],
+      ["Does this model market ups and downs?", "No — it uses a fixed annual return. Real sequences vary; a run of early losses (sequence risk) can deplete savings even when the average return looks fine."],
+    ],
+  },
+
+  retirement_income_calc: {
+    method: {
+      lead: "It solves for the level monthly income your savings can pay over your retirement years, using a real (inflation-adjusted) return so the figure holds its purchasing power. That income is the annuity payment that amortizes the nest egg to zero:",
+      expression: "Real rate = (1 + return) ÷ (1 + inflation) − 1\nMonthly income = the payment that amortizes the nest egg over the months at the real rate",
+      where: [
+        ["Real rate", "the return after stripping out inflation"],
+        ["months", "years in retirement × 12"],
+      ],
+      note: "Using the real rate means the monthly income is stated in today's dollars and stays constant in purchasing power — in nominal terms you'd actually withdraw a little more each year. It draws the balance to zero over the horizon, so build in a margin against a longer life.",
+    },
+    terms: [
+      ["Real rate of return", "The growth rate after inflation is removed — what actually grows your purchasing power."],
+      ["Sustainable income", "The withdrawal that empties the balance over the chosen horizon."],
+      ["Nominal vs real", "Nominal is the raw dollar figure; real holds constant buying power."],
+    ],
+    faqs: [
+      ["Why use a real return instead of the nominal one?", "So the income keeps its purchasing power. A real-rate payment stays constant in today's dollars; in actual dollars you'd withdraw a bit more each year to keep pace with prices."],
+      ["Does the money last forever?", "No — it's sized to run out exactly at the end of your horizon. For income that could last indefinitely, withdraw less than the balance's real return."],
+      ["What return and inflation should I use?", "A diversified portfolio's long-run return and a long-run inflation estimate. The gap between them — the real rate — drives the result, so be conservative with both."],
+    ],
+  },
+
+  ss_analysis: {
+    method: {
+      lead: "It computes the lifetime total each claiming age would pay — the annual benefit times the years you'd collect it up to your life expectancy — and picks the age with the biggest cumulative total:",
+      expression: "Lifetime total = Annual benefit × (life expectancy − claiming age)\nBenefit: 62 → 70% of PIA, 67 → 100%, 70 → 124%",
+      where: [
+        ["PIA", "your full-retirement-age benefit (Primary Insurance Amount)"],
+        ["claiming age", "62 (reduced), 67 (full), or 70 (delayed)"],
+      ],
+      note: "Claiming early means more years of smaller checks; delaying means fewer years of larger ones. The crossover depends entirely on how long you live — which is why life expectancy is the pivotal input. It ignores taxes, spousal benefits, and the time value of money.",
+    },
+    terms: [
+      ["Claiming age", "When you start Social Security, between 62 and 70."],
+      ["Break-even age", "The age at which delaying overtakes claiming early in cumulative benefits."],
+      ["PIA (Primary Insurance Amount)", "The benefit payable at full retirement age."],
+      ["Delayed retirement credits", "The ~8%/year increase for claiming after full retirement age, up to 70."],
+    ],
+    faqs: [
+      ["Is claiming later always better?", "Only if you live long enough. Delaying buys a bigger check but you collect it for fewer years; the longer your life expectancy, the more delaying wins."],
+      ["What's not included?", "Taxes on benefits, spousal and survivor benefits, and the time value of money (a dollar today vs later). Those can shift the real-world answer."],
+      ["How much does waiting from 67 to 70 add?", "Roughly 8% a year in delayed credits — about 24% more at 70 than at full retirement age, as reflected in the calculator."],
+    ],
+  },
+
+  ss_distribution: {
+    method: {
+      lead: "Whether your Social Security is taxed depends on \"provisional income\" — your other income plus half your benefit. It's compared to two thresholds; below the first none is taxable, and the taxable share climbs toward a cap of 85% of the benefit:",
+      expression: "Provisional income = Other income + ½ × Annual benefit\nThresholds (single): $25,000 and $34,000  ·  (married): $32,000 and $44,000",
+      where: [
+        ["Below the first threshold", "0% of the benefit is taxable"],
+        ["Between the thresholds", "up to 50% of the benefit becomes taxable"],
+        ["Above the second", "up to 85% of the benefit becomes taxable"],
+      ],
+      note: "At most 85% of your benefit is ever taxable — never 100% — and that portion is then taxed at your ordinary rate, not a flat 85% tax. This mirrors the IRS worksheet; the actual figure also depends on deductions and your full return.",
+    },
+    terms: [
+      ["Provisional (combined) income", "Other income plus half your Social Security benefit — the figure the thresholds test."],
+      ["Taxable portion", "The share of benefits added to taxable income (0%, up to 50%, or up to 85%)."],
+      ["Base thresholds", "The income levels ($25k/$32k and $34k/$44k) that set the tiers."],
+    ],
+    faqs: [
+      ["Is 85% the tax rate?", "No — it's the maximum share of your benefit that can be taxed. That portion is then taxed at your ordinary income rate. Most people owe far less than 85% of their benefit in tax."],
+      ["Why is only half my benefit counted for the threshold?", "That's how the IRS defines provisional income — other income plus one-half of benefits. It's a formula quirk, not a statement about how much is taxable."],
+      ["How can I reduce the tax on benefits?", "Managing other income (e.g. Roth withdrawals, which don't count) can keep provisional income below a threshold. The thresholds aren't inflation-indexed, so more retirees cross them over time."],
+    ],
+  },
+
   /* ----------------------------------------------------------- Miscellaneous */
   inflation: {
     method: {
@@ -904,6 +1128,203 @@ export const EXPLAINERS = {
     ],
   },
 
+  discount_tax: {
+    method: {
+      lead: "It applies the discount first, then charges sales tax on the reduced price — the order a register rings up a sale:",
+      expression: "Final = Price × (1 − discount%) × (1 + tax%)",
+      where: [
+        ["discount%", "the markdown off the original price"],
+        ["tax%", "the sales-tax rate applied after the discount"],
+      ],
+      note: "Order matters. Tax is charged on the discounted price, not the original — so a coupon lowers the tax too. (A few jurisdictions and certain coupon types tax the pre-discount price; this uses the common case.)",
+    },
+    terms: [
+      ["Discount", "An amount or percentage off the original price."],
+      ["Sales tax", "A percentage added at purchase, here applied to the after-discount price."],
+      ["List price", "The original price before any markdown."],
+    ],
+    faqs: [
+      ["Is tax applied before or after the discount?", "After, in the usual case — you're taxed on what you actually pay. This calculator discounts first, then taxes."],
+      ["Does a coupon reduce the tax too?", "Usually yes, because the tax is on the lower price. Some manufacturer coupons and jurisdictions are exceptions and tax the original price."],
+      ["Can I stack multiple discounts?", "This handles a single percentage. For stacked discounts, apply them one at a time — the second comes off the already-reduced price."],
+    ],
+  },
+
+  date_calc: {
+    method: {
+      lead: "It converts both dates to a day count and subtracts them, then expresses the gap in weeks and approximate months and business days:",
+      expression: "Days = End date − Start date\nWeeks = Days ÷ 7   ·   Months ≈ Days ÷ 30.44   ·   Business days ≈ Days × 5/7",
+      where: [
+        ["Months", "uses 30.44, the average days per month across a year"],
+        ["Business days", "≈ 5/7 of calendar days (weekends removed by ratio, holidays not)"],
+      ],
+      note: "Months and business days are approximations — real months run 28 to 31 days, and the business-day figure removes weekends by ratio but not public holidays. The day count itself is exact.",
+    },
+    terms: [
+      ["Calendar days", "Every day in the span, weekends and holidays included."],
+      ["Business days", "Weekdays only; this estimates them as 5/7 of the total."],
+      ["Average month length", "30.44 days, i.e. 365.25 ÷ 12, used for the month estimate."],
+    ],
+    faqs: [
+      ["Is the day count exact?", "Yes — it's a direct difference between the two dates. The weeks, months and business-day figures derived from it are approximations."],
+      ["Are holidays removed from business days?", "No — the estimate removes weekends by ratio (5/7) but not public holidays, so the true number of working days may be slightly lower."],
+      ["Why is a month 30.44 days here?", "That's the yearly average (365.25 ÷ 12). Using it avoids picking a specific 28–31-day month, at the cost of being approximate for any single month."],
+    ],
+  },
+
+  unit_conversion: {
+    method: {
+      lead: "Each category converts through a base unit. Length passes through metres and weight through kilograms — multiply into the base, then divide into the target. Temperature isn't a simple ratio, so it converts via Celsius:",
+      expression: "Length/Weight: Result = Value × (base_from ÷ base_to)\nTemperature: convert to Celsius, then to the target scale",
+      where: [
+        ["base_from / base_to", "each unit's size in the base unit (metres or kilograms)"],
+      ],
+      note: "Length and weight are linear (a simple ratio), but temperature scales have different zero points — 0 °C isn't 0 °F — so they can't be done by ratio and route through Celsius. Converting between unrelated categories (say metres to kilograms) is rejected rather than silently mishandled.",
+    },
+    terms: [
+      ["Base unit", "The reference each category converts through (metre for length, kilogram for weight)."],
+      ["Linear conversion", "A straight multiply-by-ratio, valid for length and weight."],
+      ["Temperature offset", "The reason °C↔°F needs addition, not just scaling (freezing is 0 °C = 32 °F)."],
+    ],
+    faqs: [
+      ["Why can't I convert metres to pounds?", "They measure different things (length vs mass), so there's no valid conversion. The calculator flags cross-category conversions instead of returning a meaningless number."],
+      ["Why is temperature handled differently?", "Temperature scales have different zero points, so you can't just multiply by a ratio. Converting through Celsius applies the right offset and scaling."],
+      ["How precise are the factors?", "It uses standard definitions (1 inch = 0.0254 m exactly, 1 lb = 0.453592 kg). Results are rounded for display but computed at full precision."],
+    ],
+  },
+
+  margin_markup: {
+    method: {
+      lead: "Margin and markup describe the same profit against different bases. Margin measures it against the selling price; markup measures it against the cost:",
+      expression: "Profit = Price − Cost\nMargin = Profit ÷ Price      Markup = Profit ÷ Cost",
+      where: [
+        ["Profit", "selling price minus cost"],
+      ],
+      note: "They're easy to confuse but never equal (except at zero). Because cost is smaller than price, markup is always the larger percentage — a 50% margin is a 100% markup. Quoting one when you mean the other is a common pricing mistake.",
+    },
+    terms: [
+      ["Gross margin", "Profit as a percentage of the selling price."],
+      ["Markup", "Profit as a percentage of the cost."],
+      ["Cost of goods", "What the item cost you — the base for markup."],
+    ],
+    faqs: [
+      ["What's the difference between margin and markup?", "The base. Margin is profit ÷ price; markup is profit ÷ cost. Same profit, different denominator — so the percentages differ."],
+      ["Why is markup always bigger than margin?", "Because cost is less than price, and the smaller denominator yields a larger percentage. A 50% margin equals a 100% markup."],
+      ["Which should I use to set prices?", "Markup is handy for pricing up from a known cost; margin is what shows on financial statements. Know which one a supplier or report means before comparing."],
+    ],
+  },
+
+  business_forecast: {
+    method: {
+      lead: "It compounds your current revenue forward at a constant annual growth rate, year on year, to project the figure at the end of your forecast horizon:",
+      expression: "Revenue in year n = Current revenue × (1 + growth)ⁿ",
+      where: [
+        ["growth", "the assumed constant annual growth rate"],
+        ["n", "the forecast year"],
+      ],
+      note: "Constant-growth compounding is a clean baseline, but real revenue rarely grows at one steady rate — markets saturate, competition arrives, cycles turn. Treat the projection as one scenario, and test a range of growth rates rather than banking on a single line.",
+    },
+    terms: [
+      ["Compound growth", "Growth applied to a rising base each period, producing an exponential curve."],
+      ["Growth rate", "The assumed year-over-year percentage increase."],
+      ["Forecast horizon", "How many years out the projection runs."],
+    ],
+    faqs: [
+      ["Is constant growth realistic?", "As a baseline over short horizons, often roughly. Over longer spans growth usually slows as a business matures — so a single high rate can overstate later years."],
+      ["What growth rate should I use?", "Base it on recent history and market conditions, and test a low, medium and high case rather than one figure. The compounding makes small rate differences huge over time."],
+      ["Does it account for costs or profit?", "No — it projects top-line revenue only. Profit depends on costs and margins, which this doesn't model."],
+    ],
+  },
+
+  fuel: {
+    method: {
+      lead: "It works out how much fuel a trip needs from your distance and fuel economy, then multiplies by the price per gallon for the total — and divides back out for the cost per mile:",
+      expression: "Gallons = Distance ÷ MPG\nCost = Gallons × Price per gallon      Cost per mile = Cost ÷ Distance",
+      where: [
+        ["MPG", "miles per gallon — your vehicle's fuel economy"],
+      ],
+      note: "Real-world economy varies with speed, load, terrain, weather and driving style, so use a realistic MPG — your recent average beats the sticker figure. For an electric vehicle the same logic applies with miles-per-kWh and the price of electricity.",
+    },
+    terms: [
+      ["Fuel economy (MPG)", "Miles travelled per gallon of fuel."],
+      ["Cost per mile", "Total fuel cost divided by distance — handy for comparing trips or vehicles."],
+      ["Gallons needed", "Distance divided by fuel economy."],
+    ],
+    faqs: [
+      ["What MPG should I enter?", "Your recent real-world average, not the window-sticker rating — actual economy is usually lower, especially in city driving or cold weather."],
+      ["Can I use this for a round trip?", "Yes — enter the total distance (both ways). For mixed city/highway driving, use a blended MPG."],
+      ["Does it work for electric vehicles?", "Not directly, but the same idea applies: swap MPG for miles-per-kWh and fuel price for the electricity rate to get cost per mile."],
+    ],
+  },
+
+  net_distribution: {
+    method: {
+      lead: "To end up with a target amount after tax and fees are taken out, you have to withdraw more than that — this \"grosses up\" the figure by dividing your desired net by the fraction you get to keep:",
+      expression: "Required gross = Desired net ÷ (1 − tax% − fees%)",
+      where: [
+        ["tax% + fees%", "the combined share taken off the top"],
+        ["1 − tax% − fees%", "the fraction that actually reaches you"],
+      ],
+      note: "Grossing up divides rather than adds back, which is why the required gross rises steeply as the deductions approach 100%. Taking 40% off means you must withdraw about 1.67× your target, not 1.4×.",
+    },
+    terms: [
+      ["Gross-up", "Solving for the pre-deduction amount that yields a desired after-deduction figure."],
+      ["Net amount", "What you actually receive after tax and fees."],
+      ["Withholding", "Tax taken out of a distribution before you receive it."],
+    ],
+    faqs: [
+      ["Why can't I just add the tax back?", "Because the tax is charged on the larger gross amount, not your net. You have to divide by the fraction you keep, which gives a bigger figure than adding the percentage back."],
+      ["What's this useful for?", "Sizing a retirement-account withdrawal, bonus, or payout so the after-tax cash hits a specific number."],
+      ["Does it use my real tax rate?", "It uses the flat rate you enter. Actual withholding and marginal rates vary, so treat the result as an estimate and confirm with your provider."],
+    ],
+  },
+
+  balance_sheet: {
+    method: {
+      lead: "It applies the accounting identity and a few headline ratios. Equity is what's left of assets after liabilities; net income is revenue minus expenses; the ratios then gauge profitability and leverage:",
+      expression: "Equity = Assets − Liabilities      Net income = Revenue − Expenses\nNet margin = Net income ÷ Revenue     Return on assets = Net income ÷ Assets",
+      where: [
+        ["Debt-to-assets", "liabilities ÷ assets — how much of the firm is financed by debt"],
+      ],
+      note: "This is a snapshot from summary totals, not a full statement analysis. The accounting identity (Assets = Liabilities + Equity) always holds; the ratios are only as meaningful as the figures you feed in, and are best read against prior periods or peers.",
+    },
+    terms: [
+      ["Owners' equity", "Assets minus liabilities — the residual claim of the owners."],
+      ["Net margin", "Net income as a percentage of revenue — profitability per dollar of sales."],
+      ["Return on assets (ROA)", "Net income relative to total assets — how efficiently assets generate profit."],
+      ["Debt-to-assets", "The share of assets funded by liabilities — a leverage gauge."],
+    ],
+    faqs: [
+      ["What is owners' equity?", "What would remain for the owners if all assets were used to pay off all liabilities: Assets − Liabilities. It's the bottom line of the accounting identity."],
+      ["Is a high return on assets always good?", "Generally it signals efficient use of assets, but it varies hugely by industry — asset-light businesses show higher ROA than capital-intensive ones, so compare like with like."],
+      ["What's a healthy debt-to-assets ratio?", "It depends on the sector. Lower means less leverage and risk; some stable industries carry more debt comfortably. Trend and peer comparison matter more than any single number."],
+    ],
+  },
+
+  financial_ratios: {
+    method: {
+      lead: "It computes five staple ratios across the three families analysts watch — liquidity, leverage and profitability — from your balance-sheet and income figures:",
+      expression: "Current ratio = Current assets ÷ Current liabilities\nDebt-to-equity = Total debt ÷ Total equity\nROA = Net income ÷ Total assets   ·   ROE = Net income ÷ Total equity   ·   Net margin = Net income ÷ Revenue",
+      where: [
+        ["Liquidity", "the current ratio — ability to cover short-term bills"],
+        ["Leverage", "debt-to-equity — reliance on debt vs owners' capital"],
+        ["Profitability", "ROA, ROE and net margin"],
+      ],
+      note: "Ratios mean little in isolation — their value is in comparison, against the same firm over time or against industry peers. A \"good\" current ratio for a supermarket differs from one for a software firm.",
+    },
+    terms: [
+      ["Current ratio", "Current assets ÷ current liabilities; above 1 means short-term assets cover short-term debts."],
+      ["Debt-to-equity", "Total debt relative to shareholders' equity — a core leverage measure."],
+      ["Return on equity (ROE)", "Net income as a percentage of equity — the return to owners."],
+      ["Net profit margin", "Net income as a percentage of revenue."],
+    ],
+    faqs: [
+      ["What's a good current ratio?", "Often cited as around 1.5–3, but it's industry-specific. Below 1 can signal liquidity strain; very high may mean idle assets. Compare to peers."],
+      ["ROA vs ROE — what's the difference?", "ROA measures profit against all assets; ROE against just the owners' equity. Leverage (debt) lifts ROE above ROA, which is why ROE alone can flatter a heavily indebted firm."],
+      ["Can I compare these across industries?", "Cautiously. Capital structures and asset intensity vary widely, so a ratio that's strong in one sector can be weak in another. Same-sector and over-time comparisons are the most reliable."],
+    ],
+  },
+
   /* -------------------------------------------------------------------- Stock */
   capm: {
     method: {
@@ -1021,6 +1442,167 @@ export const EXPLAINERS = {
       ["Why must the required return exceed the growth rate?", "If dividends grew as fast as (or faster than) your discount rate forever, their present value wouldn't converge — the formula would return an infinite or negative value. Perpetual growth above the discount rate isn't realistic."],
       ["Why is the value so sensitive to the inputs?", "Because it divides by the small gap (r − g). When r and g are close, tiny changes in either produce large swings in value — a key caution with this model."],
       ["What stocks does it suit?", "Mature, steady dividend payers whose growth is plausibly stable. It fits fast-growing or non-dividend stocks poorly; a two-stage model (the <a href=\"/calc/stock_nonconstant_growth\">non-constant growth calculator</a>) handles a high-growth phase."],
+    ],
+  },
+
+  stock_nonconstant_growth: {
+    method: {
+      lead: "A two-stage dividend discount model. It discounts each dividend through an explicit high-growth phase, then values everything after as a Gordon-growth \"terminal value\" and discounts that lump back too:",
+      expression: "Value = Σ Dₜ/(1 + r)ᵗ  (high-growth years)  +  Terminal ÷ (1 + r)ⁿ\nTerminal = D₍ₙ₊₁₎ / (r − g_stable)",
+      where: [
+        ["Dₜ", "the dividend in year t of the high-growth phase"],
+        ["r, g_stable", "the required return and the perpetual growth rate after the high-growth years"],
+        ["n", "the number of high-growth years"],
+      ],
+      note: "This suits companies expected to grow fast for a while, then settle to a steady mature rate — a better fit than single-stage growth for young firms. As with any dividend model it needs r > stable g, and the terminal value (often most of the total) is very sensitive to that stable-growth assumption.",
+    },
+    terms: [
+      ["Two-stage DDM", "A dividend model with an explicit high-growth phase followed by stable perpetual growth."],
+      ["Terminal value", "The value, at the end of the high-growth phase, of all dividends thereafter."],
+      ["Required return (r)", "The annual return you demand to hold the stock."],
+      ["Present value", "Future dividends and the terminal value discounted to today."],
+    ],
+    faqs: [
+      ["When is a two-stage model better than constant growth?", "When a company is growing quickly now but will plausibly slow to a mature rate later — most young or fast-growing firms. Constant growth can't capture that transition."],
+      ["Why does the terminal value dominate?", "It captures every dividend beyond the explicit years, so it's often the majority of the total — which also makes the result very sensitive to the stable-growth and required-return assumptions."],
+      ["What if the company pays no dividend?", "Dividend models fit poorly. For non-payers, analysts often use discounted free cash flow or valuation multiples instead."],
+    ],
+  },
+
+  expected_return: {
+    method: {
+      lead: "It combines three scenarios into a probability-weighted average return, then measures the spread around that average — the standard deviation — as a proxy for risk:",
+      expression: "Expected return = Σ (probability × return)\nVariance = Σ probability × (return − expected)²   ·   Risk = √Variance",
+      where: [
+        ["probability", "each scenario's likelihood (should total 100%)"],
+        ["return", "the outcome in each scenario"],
+      ],
+      note: "Expected return is the mean outcome, not the most likely one, and standard deviation treats upside and downside swings equally. For the figures to be valid the probabilities should sum to 100% — the calculator warns when they don't.",
+    },
+    terms: [
+      ["Expected return", "The probability-weighted average of all scenario returns."],
+      ["Variance / standard deviation", "How far outcomes spread from the average — a common risk measure."],
+      ["Probability distribution", "The set of outcomes and their likelihoods."],
+    ],
+    faqs: [
+      ["Is the expected return the most likely outcome?", "No — it's the weighted average across scenarios. The actual result will be one of the scenarios; the expected value may not equal any single one of them."],
+      ["Why measure standard deviation?", "It quantifies risk as the spread of outcomes. Two investments with the same expected return can have very different standard deviations — the higher one is riskier."],
+      ["Do the probabilities have to add to 100%?", "Yes, for the math to be valid. If they don't, the weighted average is distorted; the calculator flags a total that isn't 100%."],
+    ],
+  },
+
+  black_scholes: {
+    method: {
+      lead: "The Black-Scholes model prices a European option from five inputs — the stock and strike prices, time to expiry, the risk-free rate and volatility — by weighing the odds the option finishes in the money against the discounted cost of exercising:",
+      expression: "Call = S·N(d₁) − K·e^(−rT)·N(d₂)     (put by symmetry)\nd₁ = [ln(S/K) + (r + σ²/2)T] / (σ√T),   d₂ = d₁ − σ√T",
+      where: [
+        ["S, K", "the stock (spot) and strike prices"],
+        ["T, r, σ", "time to expiry in years, the risk-free rate, and volatility"],
+        ["N()", "the standard normal cumulative distribution"],
+      ],
+      note: "It assumes European exercise (only at expiry), no dividends, and constant volatility — simplifications real markets break. Volatility is the one input you can't observe directly and the one the price is most sensitive to; the model splits the premium into intrinsic value and time value.",
+    },
+    terms: [
+      ["Call / put", "The right to buy (call) or sell (put) at the strike price."],
+      ["Strike price (K)", "The price at which the option can be exercised."],
+      ["Volatility (σ)", "How much the stock's returns swing — the key, unobservable input."],
+      ["Intrinsic vs time value", "Intrinsic is the in-the-money amount now; time value is the rest of the premium."],
+    ],
+    faqs: [
+      ["What is volatility and why does it matter so much?", "It's the expected variability of the stock's returns. Higher volatility raises both call and put prices because it widens the range of favourable outcomes — and it's the input the price is most sensitive to."],
+      ["Does this handle American options or dividends?", "No — it's the plain European, no-dividend model. American options (exercisable any time) and dividend-payers need adjusted models."],
+      ["What's the difference between intrinsic and time value?", "Intrinsic value is what the option is worth if exercised now; time value is the extra premium for the chance it moves further in your favour before expiry. They sum to the option price."],
+    ],
+  },
+
+  pivot_points: {
+    method: {
+      lead: "Pivot points project intraday support and resistance from the prior session's high, low and close. The central pivot is their average, and the support/resistance levels step out from it using the prior range:",
+      expression: "P = (High + Low + Close) ÷ 3\nR1 = 2P − Low,  S1 = 2P − High\nR2 = P + (High − Low),  S2 = P − (High − Low)",
+      where: [
+        ["High, Low, Close", "the previous period's price extremes and closing price"],
+        ["R1–R3 / S1–S3", "successive resistance and support levels"],
+      ],
+      note: "These are a mechanical charting tool, not a forecast — they mark price levels some traders watch, which can become self-fulfilling. They say nothing about direction, and work best combined with other signals rather than in isolation.",
+    },
+    terms: [
+      ["Pivot point (P)", "The average of the prior high, low and close — the central reference level."],
+      ["Support / resistance", "Price levels where declines or advances have tended to stall."],
+      ["Intraday", "Within a single trading day, the usual timeframe for standard pivots."],
+    ],
+    faqs: [
+      ["What are pivot points used for?", "Day traders use them to mark potential intraday turning points — levels where price might find support or resistance — and to set entries, targets or stops around them."],
+      ["Do they predict price?", "No — they're derived purely from the prior session's numbers. Any tendency for price to react at them is partly because many traders watch the same levels."],
+      ["Which inputs do I use?", "The previous period's high, low and close (usually the prior day for intraday trading). This uses the standard formula; variants (Fibonacci, Camarilla, Woodie) weight them differently."],
+    ],
+  },
+
+  fibonacci: {
+    method: {
+      lead: "It marks the classic Fibonacci retracement levels across a price swing. Each level is a fraction of the high-to-low range measured back from the extreme, in the direction a pullback would move:",
+      expression: "Level price (uptrend) = High − (High − Low) × ratio\nRatios: 23.6%, 38.2%, 50%, 61.8%, 78.6%",
+      where: [
+        ["High, Low", "the swing's extremes"],
+        ["ratio", "the Fibonacci retracement fraction"],
+      ],
+      note: "The key ratios (notably 61.8%, the \"golden ratio\") come from the Fibonacci sequence; 50% is included by convention though it isn't a Fibonacci number. These are levels some traders watch for a pullback to pause or reverse — a charting aid, not a prediction.",
+    },
+    terms: [
+      ["Retracement", "A temporary counter-move within a larger trend."],
+      ["Fibonacci ratios", "23.6%, 38.2%, 61.8% (and 78.6%) — derived from the Fibonacci sequence."],
+      ["Golden ratio", "~61.8%, the most watched Fibonacci retracement level."],
+      ["Swing high / low", "The extremes of the price move being measured."],
+    ],
+    faqs: [
+      ["Where do the ratios come from?", "From the Fibonacci sequence: dividing terms gives ~61.8%, ~38.2%, and so on. 50% isn't a true Fibonacci ratio but is included by long-standing convention."],
+      ["Do prices really respect these levels?", "Sometimes price pauses or reverses near them, but there's no guarantee. Their influence is partly self-fulfilling because so many traders plot the same lines."],
+      ["Uptrend vs downtrend — what changes?", "The direction the retracement is measured. In an uptrend levels are measured down from the high; in a downtrend, up from the low."],
+    ],
+  },
+
+  dividend_tax: {
+    method: {
+      lead: "It taxes your two kinds of dividends differently. Qualified dividends get the lower long-term capital-gains rate tied to your bracket; ordinary (non-qualified) dividends are taxed at your full income rate:",
+      expression: "Tax = Qualified × qualified rate + Ordinary × income rate\nQualified rate: 0% (10–12% brackets), 15% (22–35%), 20% (37%)",
+      where: [
+        ["Qualified rate", "the long-term capital-gains rate for your bracket"],
+        ["income rate", "your ordinary marginal bracket, applied to non-qualified dividends"],
+      ],
+      note: "Qualifying requires the payer and a holding-period test to be met; otherwise a dividend is ordinary. This maps brackets to the 0/15/20% capital-gains rates and ignores the additional 3.8% net investment income tax on higher earners.",
+    },
+    terms: [
+      ["Qualified dividend", "A dividend meeting IRS holding-period and payer rules, taxed at capital-gains rates."],
+      ["Ordinary (non-qualified) dividend", "Taxed at your regular income rate."],
+      ["Long-term capital-gains rates", "The 0%, 15% and 20% tiers qualified dividends use."],
+      ["Holding period", "The minimum time you must own the shares for a dividend to qualify."],
+    ],
+    faqs: [
+      ["What makes a dividend 'qualified'?", "It must be paid by a US or qualifying foreign corporation and you must hold the shares long enough (generally more than 60 days around the ex-dividend date). If not, it's taxed as ordinary income."],
+      ["Why are qualified dividends taxed less?", "They get the same preferential 0/15/20% rates as long-term capital gains, to encourage longer-term investing. Ordinary dividends get no such break."],
+      ["Is there any extra tax?", "Higher earners may owe an additional 3.8% net investment income tax on dividends, which this calculator doesn't include."],
+    ],
+  },
+
+  commodities_futures: {
+    method: {
+      lead: "Futures profit is the price move in your favour, scaled by the contract's point value and the number of contracts. Going long you profit when price rises; going short, when it falls:",
+      expression: "P/L = Price move × Value per point × Contracts\nPrice move = Exit − Entry (long)  or  Entry − Exit (short)",
+      where: [
+        ["Value per point", "the dollar value of a one-point move in one contract"],
+        ["Contracts", "how many you hold"],
+      ],
+      note: "Futures are leveraged — you control a large contract value for a small margin deposit, so both gains and losses are magnified relative to the cash you put up. This is gross P/L before commissions, exchange fees and any overnight financing.",
+    },
+    terms: [
+      ["Futures contract", "An agreement to buy or sell an asset at a set price on a future date."],
+      ["Long / short", "A position that profits from a rising (long) or falling (short) price."],
+      ["Point value / tick value", "The money one unit of price movement is worth per contract."],
+      ["Leverage", "Controlling a large contract value with a small margin deposit."],
+    ],
+    faqs: [
+      ["How is futures profit calculated?", "The price move times the contract's value-per-point times the number of contracts — with the move sign flipped for short positions."],
+      ["Why are futures considered risky?", "Leverage. A small margin controls a large notional value, so a modest price move is a large percentage gain or loss on your deposit — and losses can exceed the margin."],
+      ["Does this include fees?", "No — it's gross profit or loss. Commissions, exchange fees and financing costs reduce the net, so factor them in separately."],
     ],
   },
 };
