@@ -72,13 +72,17 @@ const title = `${calc.name} — KakouCalc`;
 
 // BreadcrumbList is an actually-supported rich result (unlike FAQPage, removed
 // 2026-05-07) and it only became expressible now that these are real URLs.
+// The category (calc.catName) is deliberately NOT a node here: categories are
+// sidebar groupings with no page of their own, and Google flags a non-final
+// breadcrumb ListItem that has no `item` URL ("Missing field item"). So the
+// structured trail is Home → Calculator (both with real URLs); the visual
+// breadcrumb below still shows the category label for humans.
 const breadcrumbSchema = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   itemListElement: [
     { "@type": "ListItem", position: 1, name: "Home", item: new URL("/", Astro.site).href },
-    { "@type": "ListItem", position: 2, name: calc.catName },
-    { "@type": "ListItem", position: 3, name: calc.name, item: new URL(`/calc/${calc.id}`, Astro.site).href },
+    { "@type": "ListItem", position: 2, name: calc.name, item: new URL(`/calc/${calc.id}`, Astro.site).href },
   ],
 };
 
