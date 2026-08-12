@@ -13,7 +13,7 @@ const pageSchema = {
   "@type": "WebPage",
   name: title,
   description,
-  url: new URL("/methodology", Astro.site).href,
+  url: new URL("/methodology/", Astro.site).href,
   dateModified: SITE.updatedISO,
   publisher: { "@type": "Organization", name: SITE.org, url: Astro.site?.href },
 };
@@ -116,7 +116,7 @@ const pageSchema = {
       <h2>Who is behind KakouCalc</h2>
       <p>
         KakouCalc is an independent, free financial-calculator publisher. Read more on the{" "}
-        <a href="/about">About page</a>, or reach the team at{" "}
+        <a href="/about/">About page</a>, or reach the team at{" "}
         <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a>.
       </p>
       {

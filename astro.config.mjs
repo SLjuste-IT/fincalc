@@ -21,7 +21,13 @@ export default defineConfig({
   // 'file' would emit /calc/tvm.html and — more importantly — bake the .html
   // suffix into every canonical and og:url tag.
   build: { format: "directory" },
-  trailingSlash: "never",
+  // MUST be "always" on Cloudflare Pages: Pages serves the directory page at the
+  // trailing-slash URL (/calc/x/ = 200) and 308-redirects the no-slash form to it.
+  // With "never", every canonical/sitemap URL was a no-slash that redirected to a
+  // page whose canonical pointed back at the no-slash URL — a circular signal that
+  // made Googlebot report "Redirect error" and refuse to index the calc pages.
+  // "always" makes canonical + sitemap match the 200-serving URLs exactly.
+  trailingSlash: "always",
   // Generates sitemap-index.xml. The /embed/<id> widget pages are excluded: they
   // are noindex and canonical to their /calc/<id> counterparts, so listing them
   // would invite indexing of duplicate content.

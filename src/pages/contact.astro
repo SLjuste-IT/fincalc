@@ -13,7 +13,7 @@ const pageSchema = {
   "@type": "ContactPage",
   name: title,
   description,
-  url: new URL("/contact", Astro.site).href,
+  url: new URL("/contact/", Astro.site).href,
   dateModified: effectiveISO,
   publisher: { "@type": "Organization", name: SITE.org, url: Astro.site?.href },
 };
@@ -36,7 +36,7 @@ const pageSchema = {
         Messages go directly to the site's operator and are read personally. There is no contact form
         by design — the site collects no data, and email keeps it that way. If you write to us, we
         receive your address and message and use them only to reply (see the{" "}
-        <a href="/privacy">Privacy Policy</a>).
+        <a href="/privacy/">Privacy Policy</a>).
       </p>
     </div>
 
@@ -49,7 +49,7 @@ const pageSchema = {
             Think a calculator gave a wrong figure? Send the calculator's name, the exact inputs you
             used, the result you got, and the result you expected. Accuracy reports get first
             priority — every report is checked against our{" "}
-            <a href="/methodology">verification suite</a> and fixed if confirmed.
+            <a href="/methodology/">verification suite</a> and fixed if confirmed.
           </dd>
         </div>
         <div class="guide-term">
@@ -62,15 +62,15 @@ const pageSchema = {
         <div class="guide-term">
           <dt>Embedding &amp; partnerships</dt>
           <dd>
-            The <a href="/terms">embed widget</a> is free to use straight from any calculator page.
+            The <a href="/terms/">embed widget</a> is free to use straight from any calculator page.
             Write in for anything beyond that — custom sizing, multiple widgets, or press.
           </dd>
         </div>
         <div class="guide-term">
           <dt>Privacy &amp; policy</dt>
           <dd>
-            Questions about the <a href="/privacy">Privacy Policy</a> or{" "}
-            <a href="/terms">Terms of Service</a>, or about an ad shown on the site.
+            Questions about the <a href="/privacy/">Privacy Policy</a> or{" "}
+            <a href="/terms/">Terms of Service</a>, or about an ad shown on the site.
           </dd>
         </div>
       </dl>
@@ -81,7 +81,7 @@ const pageSchema = {
       <p>
         We cannot give personal financial advice — not by email, and not through the calculators. The
         tools are educational; for decisions about your own money, please consult a qualified
-        professional. See <a href="/about">about us</a> for how the site is run.
+        professional. See <a href="/about/">about us</a> for how the site is run.
       </p>
     </div>
   </section>

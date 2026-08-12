@@ -54,8 +54,8 @@ export const GUIDES = {
     ],
     faqs: [
       ["Does a shorter term save money?", "Yes. A shorter term raises the monthly payment but sharply cuts total interest, because you're borrowing the money for less time."],
-      ["What's the difference between the interest rate and the APR?", "The interest rate prices the loan itself; the <a href=\"/calc/apr\">APR</a> also folds in fees to show the true annual cost. Compare offers by APR, not headline rate."],
-      ["Do extra payments help?", "A lot. Every extra dollar goes straight to principal, shrinking the balance that future interest is charged on. The <a href=\"/calc/loan_analysis\">Loan Analysis calculator</a> shows the effect."],
+      ["What's the difference between the interest rate and the APR?", "The interest rate prices the loan itself; the <a href=\"/calc/apr/\">APR</a> also folds in fees to show the true annual cost. Compare offers by APR, not headline rate."],
+      ["Do extra payments help?", "A lot. Every extra dollar goes straight to principal, shrinking the balance that future interest is charged on. The <a href=\"/calc/loan_analysis/\">Loan Analysis calculator</a> shows the effect."],
     ],
     related: ["apr", "loan_analysis", "auto_loan", "home_afford"],
   },
@@ -260,7 +260,7 @@ export const GUIDES = {
       ["Compounding", "Interest charged on interest already added to the balance."],
     ],
     faqs: [
-      ["Why does paying only the minimum cost so much?", "Minimums are set low, so most of each one covers interest and the balance barely moves. The <a href=\"/calc/cc_minimum\">Credit Card Minimum calculator</a> shows just how long it drags on."],
+      ["Why does paying only the minimum cost so much?", "Minimums are set low, so most of each one covers interest and the balance barely moves. The <a href=\"/calc/cc_minimum/\">Credit Card Minimum calculator</a> shows just how long it drags on."],
       ["Does a higher payment really help that much?", "Yes. Interest is charged on the remaining balance, so paying it down faster compounds in your favor."],
       ["What if my payment is too low?", "If it doesn't exceed the monthly interest, the balance grows instead of shrinking. Raising the payment is the only fix."],
     ],

@@ -12,7 +12,7 @@ const pageSchema = {
   "@type": "Blog",
   name: "KakouCalc Blog",
   description,
-  url: new URL("/blog", Astro.site).href,
+  url: new URL("/blog/", Astro.site).href,
 };
 ---
 
@@ -35,7 +35,7 @@ const pageSchema = {
       {
         posts.map(([slug, a]) => (
           <li class="blog-card">
-            <a href={`/blog/${slug}`}>
+            <a href={`/blog/${slug}/`}>
               <h2>{a.title}</h2>
               <p>{a.description}</p>
               <span class="blog-card-more">Read the guide →</span>

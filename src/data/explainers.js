@@ -47,8 +47,8 @@ export const EXPLAINERS = {
     ],
     faqs: [
       ["What return should I assume?", "Use a rate that matches how the money is invested: near-zero for a savings account, higher (and less certain) for a diversified stock portfolio. A lower assumption is the safer plan — try it to stress-test the goal."],
-      ["What if I can't afford the required amount?", "Push the target date out, lower the goal, or raise the assumed return (which usually means taking more risk). Small increases to the monthly deposit compound surprisingly fast over long horizons — see the <a href=\"/calc/compound\">compound interest calculator</a>."],
-      ["Does it account for taxes or inflation?", "No — it works in today's dollars and ignores tax on gains. If the goal is far off, set the goal higher to preserve purchasing power, or check the <a href=\"/calc/inflation\">inflation calculator</a>."],
+      ["What if I can't afford the required amount?", "Push the target date out, lower the goal, or raise the assumed return (which usually means taking more risk). Small increases to the monthly deposit compound surprisingly fast over long horizons — see the <a href=\"/calc/compound/\">compound interest calculator</a>."],
+      ["Does it account for taxes or inflation?", "No — it works in today's dollars and ignores tax on gains. If the goal is far off, set the goal higher to preserve purchasing power, or check the <a href=\"/calc/inflation/\">inflation calculator</a>."],
     ],
   },
 
@@ -61,7 +61,7 @@ export const EXPLAINERS = {
         ["n", "compounding periods per year (daily = 365, monthly = 12)"],
         ["t", "the term in years (months ÷ 12)"],
       ],
-      note: "APY restates all of this as a single effective annual rate, so two CDs with different compounding can be compared on one number. See the <a href=\"/calc/effective_rate\">effective rate calculator</a>.",
+      note: "APY restates all of this as a single effective annual rate, so two CDs with different compounding can be compared on one number. See the <a href=\"/calc/effective_rate/\">effective rate calculator</a>.",
     },
     terms: [
       ["APY", "Annual percentage yield — the effective yearly return once compounding is counted."],
@@ -233,7 +233,7 @@ export const EXPLAINERS = {
     ],
     faqs: [
       ["Is this the same as total return?", "No — it's income only. Total return also includes any change in the investment's price, which can be positive or negative."],
-      ["Does it reinvest the income?", "No — it assumes you take the income as cash. To compound reinvested income, use the <a href=\"/calc/compound\">compound interest calculator</a>."],
+      ["Does it reinvest the income?", "No — it assumes you take the income as cash. To compound reinvested income, use the <a href=\"/calc/compound/\">compound interest calculator</a>."],
       ["Is the income taxable?", "Usually yes — interest and non-qualified dividends are generally taxed as income. This shows the pre-tax figure."],
     ],
   },
@@ -551,7 +551,7 @@ export const EXPLAINERS = {
     ],
     faqs: [
       ["Should I just pick the lower monthly payment?", "Not necessarily. A lower payment often comes from a longer term, which can cost more in total interest. Compare the total-cost figure, not just the monthly one."],
-      ["Does it account for fees or APR?", "No — it compares rate, amount and term. To fold fees and points into a single rate, use the <a href=\"/calc/apr\">APR calculator</a>."],
+      ["Does it account for fees or APR?", "No — it compares rate, amount and term. To fold fees and points into a single rate, use the <a href=\"/calc/apr/\">APR calculator</a>."],
       ["The two loan amounts differ — is the comparison still fair?", "It compares total dollars paid, so different amounts are handled; but a like-for-like rate comparison is clearest when the amounts match."],
     ],
   },
@@ -665,7 +665,7 @@ export const EXPLAINERS = {
     ],
     faqs: [
       ["Why do minimum payments take so long?", "Early on, most of each minimum covers interest, so the balance barely moves — and as it does fall, the minimum falls with it, dragging out the tail for years."],
-      ["How much extra should I pay?", "Any fixed amount above the minimum helps enormously, because the extra goes straight to principal. Even a small fixed monthly payment beats a shrinking percentage. See the <a href=\"/calc/cc_payoff\">payoff calculator</a>."],
+      ["How much extra should I pay?", "Any fixed amount above the minimum helps enormously, because the extra goes straight to principal. Even a small fixed monthly payment beats a shrinking percentage. See the <a href=\"/calc/cc_payoff/\">payoff calculator</a>."],
       ["Can the minimum fail to cover the interest?", "On very high APRs with a low percentage minimum, early payments can barely exceed the interest, so the balance falls at a crawl. Paying more than the minimum is the only fix."],
     ],
   },
@@ -989,7 +989,7 @@ export const EXPLAINERS = {
     faqs: [
       ["What is CPI?", "A government index tracking the average price of a fixed basket of goods and services. The change in CPI between two years is the headline inflation rate over that span."],
       ["Why doesn't it match my experience?", "CPI is an average across the whole economy. If you spend more than average on categories rising faster than the index (rent, medical care), your felt inflation will be higher."],
-      ["Is a raise that matches inflation really a raise?", "Only in nominal terms — it holds your purchasing power flat. A raise below inflation is a real-terms pay cut; compare with the <a href=\"/calc/salary_increase\">salary increase calculator</a>."],
+      ["Is a raise that matches inflation really a raise?", "Only in nominal terms — it holds your purchasing power flat. A raise below inflation is a real-terms pay cut; compare with the <a href=\"/calc/salary_increase/\">salary increase calculator</a>."],
     ],
   },
 
@@ -1011,7 +1011,7 @@ export const EXPLAINERS = {
     ],
     faqs: [
       ["What's the difference between nominal and effective?", "Nominal ignores compounding; effective includes it. 12% compounded monthly is an effective 12.68% — the extra comes from interest earning interest during the year."],
-      ["Is APY the same as APR?", "Not quite. APY (like EAR) includes compounding and describes what you earn on savings. APR describes borrowing cost and, by convention, usually excludes intra-year compounding — see the <a href=\"/calc/apr\">APR calculator</a>."],
+      ["Is APY the same as APR?", "Not quite. APY (like EAR) includes compounding and describes what you earn on savings. APR describes borrowing cost and, by convention, usually excludes intra-year compounding — see the <a href=\"/calc/apr/\">APR calculator</a>."],
       ["Why does compounding frequency matter?", "Each compounding adds interest sooner, which then earns its own interest. Daily beats monthly beats annual — though the gap narrows as frequency rises."],
     ],
   },
@@ -1069,7 +1069,7 @@ export const EXPLAINERS = {
         ["Hours per week", "typically 40 for full-time"],
         ["Weeks per year", "52 if paid time off is included; fewer to model unpaid weeks"],
       ],
-      note: "This is gross pay, before taxes and deductions. To estimate take-home from a salary, see the <a href=\"/calc/paycheck_tax\">paycheck tax calculator</a>.",
+      note: "This is gross pay, before taxes and deductions. To estimate take-home from a salary, see the <a href=\"/calc/paycheck_tax/\">paycheck tax calculator</a>.",
     },
     terms: [
       ["Gross pay", "Earnings before any taxes or deductions."],
@@ -1100,7 +1100,7 @@ export const EXPLAINERS = {
     ],
     faqs: [
       ["What's a typical annual raise?", "Merit raises often land in the low single digits; larger jumps usually come with promotions or job changes. It varies widely by industry and year."],
-      ["Does a raise keep up with inflation?", "Only if it meets or beats the inflation rate. Check the gap with the <a href=\"/calc/inflation\">inflation calculator</a> — below-inflation raises quietly erode purchasing power."],
+      ["Does a raise keep up with inflation?", "Only if it meets or beats the inflation rate. Check the gap with the <a href=\"/calc/inflation/\">inflation calculator</a> — below-inflation raises quietly erode purchasing power."],
       ["How is a raise taxed?", "Only the additional income is taxed, at your marginal rate — a raise never lowers your overall take-home. Withholding on bonuses can look higher, but it evens out at filing."],
     ],
   },
@@ -1384,7 +1384,7 @@ export const EXPLAINERS = {
         ["Begin / End value", "the investment's worth at the start and the end"],
         ["Income", "dividends or interest received while holding"],
       ],
-      note: "HPR is the return for the <em>whole</em> period, not per year. To compare holdings of different lengths, annualize it or use the <a href=\"/calc/roi\">ROI calculator</a>'s CAGR.",
+      note: "HPR is the return for the <em>whole</em> period, not per year. To compare holdings of different lengths, annualize it or use the <a href=\"/calc/roi/\">ROI calculator</a>'s CAGR.",
     },
     terms: [
       ["Holding period return", "Total return over the full time an asset was held, price plus income."],
@@ -1441,7 +1441,7 @@ export const EXPLAINERS = {
     faqs: [
       ["Why must the required return exceed the growth rate?", "If dividends grew as fast as (or faster than) your discount rate forever, their present value wouldn't converge — the formula would return an infinite or negative value. Perpetual growth above the discount rate isn't realistic."],
       ["Why is the value so sensitive to the inputs?", "Because it divides by the small gap (r − g). When r and g are close, tiny changes in either produce large swings in value — a key caution with this model."],
-      ["What stocks does it suit?", "Mature, steady dividend payers whose growth is plausibly stable. It fits fast-growing or non-dividend stocks poorly; a two-stage model (the <a href=\"/calc/stock_nonconstant_growth\">non-constant growth calculator</a>) handles a high-growth phase."],
+      ["What stocks does it suit?", "Mature, steady dividend payers whose growth is plausibly stable. It fits fast-growing or non-dividend stocks poorly; a two-stage model (the <a href=\"/calc/stock_nonconstant_growth/\">non-constant growth calculator</a>) handles a high-growth phase."],
     ],
   },
 

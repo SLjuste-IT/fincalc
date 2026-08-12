@@ -145,7 +145,7 @@ const schemas = [siteSchema, orgSchema, ...jsonLd];
                   <div class="nav-cat-body" id={`navcat-${cat.id}`}>
                     <div class="nav-cat-inner">
                       {cat.calcs.map((c) => (
-                        <a href={`/calc/${c.id}`} data-id={c.id} title={c.name} class={c.id === activeId ? "active" : undefined}>
+                        <a href={`/calc/${c.id}/`} data-id={c.id} title={c.name} class={c.id === activeId ? "active" : undefined}>
                           {shortName(c.name)}
                         </a>
                       ))}
@@ -181,12 +181,12 @@ const schemas = [siteSchema, orgSchema, ...jsonLd];
           Terms) reachable from every page — this footer is that guarantee. */}
       <nav class="footer-nav" aria-label="Site">
         <a href="/">Home</a>
-        <a href="/blog">Blog</a>
-        <a href="/about">About</a>
-        <a href="/methodology">Methodology</a>
-        <a href="/contact">Contact</a>
-        <a href="/privacy">Privacy Policy</a>
-        <a href="/terms">Terms of Service</a>
+        <a href="/blog/">Blog</a>
+        <a href="/about/">About</a>
+        <a href="/methodology/">Methodology</a>
+        <a href="/contact/">Contact</a>
+        <a href="/privacy/">Privacy Policy</a>
+        <a href="/terms/">Terms of Service</a>
       </nav>
       <p>KakouCalc — for educational purposes only. Not financial advice. Verify figures independently.</p>
     </footer>

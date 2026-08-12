@@ -13,7 +13,7 @@ const { slug, article } = Astro.props;
 const primaryCalc = CALC_INDEX[article.calc];
 const relatedCalcs = (article.related || []).map((id) => CALC_INDEX[id]).filter(Boolean);
 const title = `${article.title} — KakouCalc`;
-const url = new URL(`/blog/${slug}`, Astro.site).href;
+const url = new URL(`/blog/${slug}/`, Astro.site).href;
 
 // BlogPosting with real datePublished/dateModified and an Organization author —
 // honest E-E-A-T. No fabricated human byline; the publisher is the site.
@@ -33,21 +33,21 @@ const articleSchema = {
 <Base
   title={title}
   description={article.description}
-  breadcrumbs={[{ name: "Home", url: "/" }, { name: "Blog", url: "/blog" }, { name: article.title }]}
+  breadcrumbs={[{ name: "Home", url: "/" }, { name: "Blog", url: "/blog/" }, { name: article.title }]}
   jsonLd={[articleSchema]}
 >
   <article class="calc-guide doc-page">
     <div class="guide-block">
       <h1>{article.title}</h1>
       <p class="article-byline">
-        Updated {SITE.updated} · Reviewed by <a href="/methodology">{SITE.editorial}</a>
+        Updated {SITE.updated} · Reviewed by <a href="/methodology/">{SITE.editorial}</a>
       </p>
       <p set:html={article.intro} />
     </div>
 
     {
       primaryCalc && (
-        <a class="article-cta" href={`/calc/${primaryCalc.id}`}>
+        <a class="article-cta" href={`/calc/${primaryCalc.id}/`}>
           <span class="article-cta-label">Run your numbers</span>
           <span class="article-cta-name">{primaryCalc.name}&nbsp;→</span>
         </a>
@@ -86,7 +86,7 @@ const articleSchema = {
           <ul>
             {relatedCalcs.map((c) => (
               <li>
-                <a href={`/calc/${c.id}`} title={c.name}>
+                <a href={`/calc/${c.id}/`} title={c.name}>
                   {shortName(c.name)}
                 </a>
               </li>
@@ -97,7 +97,7 @@ const articleSchema = {
     }
 
     <p class="guide-meta">
-      Educational information, not financial advice. See our <a href="/methodology">methodology</a>.
+      Educational information, not financial advice. See our <a href="/methodology/">methodology</a>.
     </p>
   </article>
 </Base>

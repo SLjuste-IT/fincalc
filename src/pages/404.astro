@@ -29,7 +29,7 @@ const popular = popularIds.map((id) => CALC_INDEX[id]).filter(Boolean);
         <ul>
           {popular.map((c) => (
             <li>
-              <a href={`/calc/${c.id}`} title={c.name}>{shortName(c.name)}</a>
+              <a href={`/calc/${c.id}/`} title={c.name}>{shortName(c.name)}</a>
             </li>
           ))}
         </ul>

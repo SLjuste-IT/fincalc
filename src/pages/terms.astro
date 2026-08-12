@@ -14,7 +14,7 @@ const pageSchema = {
   "@type": "WebPage",
   name: title,
   description,
-  url: new URL("/terms", Astro.site).href,
+  url: new URL("/terms/", Astro.site).href,
   dateModified: effectiveISO,
   publisher: { "@type": "Organization", name: SITE.org, url: Astro.site?.href },
 };
@@ -54,12 +54,12 @@ const pageSchema = {
       <h2>Accuracy and its limits</h2>
       <p>
         We work hard on accuracy — the formulas are standard, and every calculator is checked against
-        an independent automated test suite (see our <a href="/methodology">methodology</a>). Even so,
+        an independent automated test suite (see our <a href="/methodology/">methodology</a>). Even so,
         the site is provided <strong>“as is” and “as available,” without warranties of any kind</strong>,
         express or implied. We do not guarantee that results are error-free, complete, current, or fit
         for any particular purpose. Tax rules, rates, and reference data change; simplified models
         cannot capture every real-world detail. If you find an error, please{" "}
-        <a href="/contact">tell us</a> — we check and fix reported issues.
+        <a href="/contact/">tell us</a> — we check and fix reported issues.
       </p>
     </div>
 
@@ -109,7 +109,7 @@ const pageSchema = {
         The site is supported by advertising (Google AdSense) and relies on third-party services for
         hosting and fonts. Advertisers are responsible for their own content, and third-party services
         are governed by their own terms and privacy policies. How these services handle data is
-        described in our <a href="/privacy">Privacy Policy</a>. Links to external sites are provided
+        described in our <a href="/privacy/">Privacy Policy</a>. Links to external sites are provided
         for convenience; we do not control or endorse their content.
       </p>
     </div>
@@ -128,7 +128,7 @@ const pageSchema = {
       <p>
         Questions about these terms? Email{" "}
         <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a> or use the{" "}
-        <a href="/contact">contact page</a>.
+        <a href="/contact/">contact page</a>.
       </p>
     </div>
   </section>

@@ -82,7 +82,7 @@ const breadcrumbSchema = {
   "@type": "BreadcrumbList",
   itemListElement: [
     { "@type": "ListItem", position: 1, name: "Home", item: new URL("/", Astro.site).href },
-    { "@type": "ListItem", position: 2, name: calc.name, item: new URL(`/calc/${calc.id}`, Astro.site).href },
+    { "@type": "ListItem", position: 2, name: calc.name, item: new URL(`/calc/${calc.id}/`, Astro.site).href },
   ],
 };
 
@@ -91,8 +91,8 @@ const breadcrumbSchema = {
 // how a calculator site earns domain authority. Absolute URLs from Astro.site so
 // the snippet works off-site. Height scales with the field count.
 const origin = Astro.site ? Astro.site.origin : "";
-const embedUrl = `${origin}/embed/${calc.id}`;
-const calcUrl = `${origin}/calc/${calc.id}`;
+const embedUrl = `${origin}/embed/${calc.id}/`;
+const calcUrl = `${origin}/calc/${calc.id}/`;
 const embedHeight = 380 + displayFields.length * 58;
 const embedSnippet = `<iframe src="${embedUrl}" title="${calc.name} by KakouCalc" width="100%" height="${embedHeight}" style="border:1px solid #e5e7eb;border-radius:10px;max-width:520px" loading="lazy"></iframe>
 <p style="font:13px/1.5 system-ui,sans-serif;margin:8px 0 0"><a href="${calcUrl}">${calc.name}</a> by <a href="${origin}">KakouCalc</a></p>`;
@@ -112,7 +112,7 @@ const embedSnippet = `<iframe src="${embedUrl}" title="${calc.name} by KakouCalc
         <h1>{calc.name}</h1>
         <p>{calc.desc}</p>
         <p class="calc-byline">
-          Reviewed by <a href="/methodology">{SITE.editorial}</a> · Updated {SITE.updated}
+          Reviewed by <a href="/methodology/">{SITE.editorial}</a> · Updated {SITE.updated}
         </p>
       </div>
     </header>
@@ -143,7 +143,7 @@ const embedSnippet = `<iframe src="${embedUrl}" title="${calc.name} by KakouCalc
         <textarea id="embedSnippet" class="embed-snippet" readonly rows="4" spellcheck="false" aria-label="Embed code">{embedSnippet}</textarea>
         <div class="embed-offer-actions">
           <button type="button" class="btn primary" id="embedCopyBtn">Copy code</button>
-          <a class="btn" href={`/embed/${calc.id}`} target="_blank" rel="noopener">Preview&nbsp;↗</a>
+          <a class="btn" href={`/embed/${calc.id}/`} target="_blank" rel="noopener">Preview&nbsp;↗</a>
         </div>
       </div>
     </details>
@@ -204,7 +204,7 @@ const embedSnippet = `<iframe src="${embedUrl}" title="${calc.name} by KakouCalc
         </div>
 
         <p class="guide-meta">
-          These guides are educational information, not financial advice. See our <a href="/methodology">methodology</a>.
+          These guides are educational information, not financial advice. See our <a href="/methodology/">methodology</a>.
         </p>
       </section>
     ) : (
@@ -221,7 +221,7 @@ const embedSnippet = `<iframe src="${embedUrl}" title="${calc.name} by KakouCalc
         <ul>
           {relatedCalcs.map((c) => (
             <li>
-              <a href={`/calc/${c.id}`} title={c.name}>
+              <a href={`/calc/${c.id}/`} title={c.name}>
                 {shortName(c.name)}
               </a>
             </li>

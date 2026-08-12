@@ -154,6 +154,6 @@ export function explainerHtml(calc, displayFields, result) {
   html += workedExampleHtml(calc, displayFields, result);
   if (a.terms && a.terms.length) html += termsHtml(a.terms);
   if (a.faqs && a.faqs.length) html += faqHtml(a.faqs);
-  html += `<p class="guide-meta">Educational information, not financial advice. See our <a href="/methodology">methodology</a> for how these tools are built and checked.</p>`;
+  html += `<p class="guide-meta">Educational information, not financial advice. See our <a href="/methodology/">methodology</a> for how these tools are built and checked.</p>`;
   return html;
 }

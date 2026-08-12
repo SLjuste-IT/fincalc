@@ -13,7 +13,7 @@ const pageSchema = {
   "@type": "AboutPage",
   name: title,
   description,
-  url: new URL("/about", Astro.site).href,
+  url: new URL("/about/", Astro.site).href,
   dateModified: SITE.updatedISO,
   publisher: { "@type": "Organization", name: SITE.org, url: Astro.site?.href },
 };
@@ -40,7 +40,7 @@ const pageSchema = {
       <dl class="guide-glossary">
         <div class="guide-term">
           <dt>Accuracy first</dt>
-          <dd>Standard formulas, and every calculator checked a second, independent way by an automated test suite. See our <a href="/methodology">methodology</a>.</dd>
+          <dd>Standard formulas, and every calculator checked a second, independent way by an automated test suite. See our <a href="/methodology/">methodology</a>.</dd>
         </div>
         <div class="guide-term">
           <dt>Your privacy</dt>
@@ -63,7 +63,7 @@ const pageSchema = {
         KakouCalc is independent. The calculators and guides are for education and planning — they are
         not financial, investment, tax, or legal advice. For decisions that matter, verify the figures
         and consult a qualified professional. How we build and check everything is documented on the{" "}
-        <a href="/methodology">methodology page</a>.
+        <a href="/methodology/">methodology page</a>.
       </p>
     </div>
 

@@ -47,7 +47,7 @@ export const ARTICLES = {
       {
         h: "Estimate your number",
         body:
-          "<p>Put your figures into the <a href=\"/calc/home_afford\">Home Affordability Calculator</a>: it works backward from a DTI limit to a maximum loan and price. As an example, a $90,000 income with $500 of other monthly debts, $40,000 saved, a 6.5% rate and a 36% DTI supports a home price of roughly <strong>$388,000</strong>. Then pressure-test it with the <a href=\"/calc/loan_basic\">Loan Calculator</a> to see the real monthly payment, and — if you're not sure buying is right — the <a href=\"/calc/rent_vs_buy\">Rent vs Buy Calculator</a>.</p>",
+          "<p>Put your figures into the <a href=\"/calc/home_afford/\">Home Affordability Calculator</a>: it works backward from a DTI limit to a maximum loan and price. As an example, a $90,000 income with $500 of other monthly debts, $40,000 saved, a 6.5% rate and a 36% DTI supports a home price of roughly <strong>$388,000</strong>. Then pressure-test it with the <a href=\"/calc/loan_basic/\">Loan Calculator</a> to see the real monthly payment, and — if you're not sure buying is right — the <a href=\"/calc/rent_vs_buy/\">Rent vs Buy Calculator</a>.</p>",
       },
     ],
     faqs: [
@@ -81,17 +81,17 @@ export const ARTICLES = {
       {
         h: "The Rule of 72",
         body:
-          "<p>Want a quick estimate of how long money takes to double? Divide 72 by the annual return. At 8% a year, money doubles in about 72 ÷ 8 = <strong>9 years</strong>. It's an approximation, but a remarkably good one for everyday rates — try it in the <a href=\"/calc/rule72\">Rule of 72 Calculator</a>.</p>",
+          "<p>Want a quick estimate of how long money takes to double? Divide 72 by the annual return. At 8% a year, money doubles in about 72 ÷ 8 = <strong>9 years</strong>. It's an approximation, but a remarkably good one for everyday rates — try it in the <a href=\"/calc/rule72/\">Rule of 72 Calculator</a>.</p>",
       },
       {
         h: "It cuts both ways",
         body:
-          "<p>Compounding works just as relentlessly <em>against</em> you on debt. A credit-card balance at 22% APR compounds monthly, which is why carrying a balance is so expensive. The same math that builds a retirement fund also grows what you owe — see the <a href=\"/calc/cc_payoff\">Credit Card Payoff Calculator</a>.</p>",
+          "<p>Compounding works just as relentlessly <em>against</em> you on debt. A credit-card balance at 22% APR compounds monthly, which is why carrying a balance is so expensive. The same math that builds a retirement fund also grows what you owe — see the <a href=\"/calc/cc_payoff/\">Credit Card Payoff Calculator</a>.</p>",
       },
       {
         h: "See it for yourself",
         body:
-          "<p>Enter your own starting balance, contribution, rate and time horizon in the <a href=\"/calc/compound\">Compound Interest Calculator</a> — it shows the projected balance and charts the growth curve. To work backward from a target instead, use the <a href=\"/calc/savings_goal\">Savings Goal Calculator</a>.</p>",
+          "<p>Enter your own starting balance, contribution, rate and time horizon in the <a href=\"/calc/compound/\">Compound Interest Calculator</a> — it shows the projected balance and charts the growth curve. To work backward from a target instead, use the <a href=\"/calc/savings_goal/\">Savings Goal Calculator</a>.</p>",
       },
     ],
     faqs: [
@@ -130,7 +130,7 @@ export const ARTICLES = {
       {
         h: "How to compare offers",
         body:
-          "<p>Compare loans by <strong>APR, not headline rate</strong>, and weigh it against how long you'll actually keep the loan. Run the numbers in the <a href=\"/calc/apr\">APR Calculator</a> (or the <a href=\"/calc/apr_advanced\">APR Advanced Calculator</a> for multiple fees and points), and use the <a href=\"/calc/loan_basic\">Loan Calculator</a> to see the monthly payment each rate produces. Thinking about buying down your rate? The <a href=\"/calc/discount_points\">Discount Points Calculator</a> finds the breakeven.</p>",
+          "<p>Compare loans by <strong>APR, not headline rate</strong>, and weigh it against how long you'll actually keep the loan. Run the numbers in the <a href=\"/calc/apr/\">APR Calculator</a> (or the <a href=\"/calc/apr_advanced/\">APR Advanced Calculator</a> for multiple fees and points), and use the <a href=\"/calc/loan_basic/\">Loan Calculator</a> to see the monthly payment each rate produces. Thinking about buying down your rate? The <a href=\"/calc/discount_points/\">Discount Points Calculator</a> finds the breakeven.</p>",
       },
     ],
     faqs: [

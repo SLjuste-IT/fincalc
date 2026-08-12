@@ -39,7 +39,7 @@ try {
   prerendered = `<div class="placeholder">Enter your figures to see results.</div>`;
 }
 
-const canonical = new URL(`/calc/${calc.id}`, Astro.site).href;
+const canonical = new URL(`/calc/${calc.id}/`, Astro.site).href;
 const title = `${calc.name} — KakouCalc`;
 ---
 
